@@ -18,9 +18,21 @@ public class AutoMove : MonoBehaviour
     {
         if (tweener.EmptyList())
         {
-            tweener.AddTween(sub.transform, sub.transform.position, new Vector2(0f, 1.0f), 0.5f, sub.transform.rotation, new Quaternion(0, 0, 0, 0));
+            AddTweens();
         }
 
 
+    }
+
+    public void AddTweens()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(0f, 1.0f), 0.35f, sub.transform.rotation, new Quaternion(0, 0, 0, 0));
+        }
+        for (int i = 0; i < 5; i++)
+        {
+            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(1.0f, 0f), 0.35f, sub.transform.rotation, new Quaternion(0, 0, 0, 0));
+        }
     }
 }
