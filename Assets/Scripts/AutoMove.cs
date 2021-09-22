@@ -21,25 +21,25 @@ public class AutoMove : MonoBehaviour
         
         if (tweener.TweenDone() && counter < 4)
         {
-            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(0f, 1.0f), 0.35f, sub.transform.rotation, new Quaternion(0, 0, 0, 0));
+            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(0f, 1.0f), 0.35f);
             counter++;
            
         }
         else if (tweener.TweenDone() && counter >3 && counter < 9  )
         {
-            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(1.0f, 0f), 0.35f, sub.transform.rotation, new Quaternion(0, 0, 0.5f, 0f));
+            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(1.0f, 0f), 0.35f);
             counter++;
           
         }
         else if (tweener.TweenDone() && counter > 8 && counter < 13)
         {
-            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(0f, -1.0f), 0.35f, sub.transform.rotation, new Quaternion(0, 0, 0, 0));
+            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(0f, -1.0f), 0.35f);
             counter++;
           
         }
         else if (tweener.TweenDone() && counter > 12 && counter < 18)
         {
-            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(-1.0f, 0f), 0.35f, sub.transform.rotation, new Quaternion(0, 0, 0, 0));
+            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(-1.0f, 0f), 0.35f);
             counter++;
            
         }

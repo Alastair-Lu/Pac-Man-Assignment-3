@@ -21,18 +21,8 @@ public class Tweener : MonoBehaviour
         {
             float timer = Time.time - activeTweens[0].StartTime;
             float ratio = timer / activeTweens[0].Duration;
-            float ratio2 = timer / 0.1f;
-            Tween current = activeTweens[0];
-            /* if (Quaternion.Angle(current.StartRot, current.EndRot) > 10f)
-             {
-                 current.Target.rotation = Quaternion.Lerp(current.StartRot, current.EndRot, ratio2);
-             }
-             else
-             {
-                 current.Target.rotation = current.EndRot;
-             }*/
-            Debug.Log(current.Target.rotation);
-            current.Target.rotation = current.EndRot;
+            
+            Tween current = activeTweens[0];            
             if (Vector3.Distance(current.Target.position, current.EndPos) > 0.05f)
             {
                 current.Target.position = Vector3.Lerp(current.StartPos,current.EndPos, ratio);
@@ -50,11 +40,11 @@ public class Tweener : MonoBehaviour
     }
 
     
-    public void AddTween(Transform targetObject, Vector2 startPos, Vector2 endPos, float duration, Quaternion startRot, Quaternion endRot)
+    public void AddTween(Transform targetObject, Vector2 startPos, Vector2 endPos, float duration)
     {
         
         {
-            activeTweens.Add(new Tween(targetObject, startPos, endPos, Time.time, duration, startRot, endRot));
+            activeTweens.Add(new Tween(targetObject, startPos, endPos, Time.time, duration));
         }
 
     }
