@@ -7,32 +7,51 @@ public class AutoMove : MonoBehaviour
     private Tweener tweener;
     [SerializeField]
     private GameObject sub;
+    int counter;
     // Start is called before the first frame update
     void Start()
     {
         tweener = GetComponent<Tweener>();
+        counter = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (tweener.EmptyList())
-        {
-            AddTweens();
-        }
-
-
-    }
-
-    public void AddTweens()
-    {
-        for (int i = 0; i < 4; i++)
+        
+        if (tweener.TweenDone() && counter < 4)
         {
             tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(0f, 1.0f), 0.35f, sub.transform.rotation, new Quaternion(0, 0, 0, 0));
+            counter++;
+           
         }
-        for (int i = 0; i < 5; i++)
+        else if (tweener.TweenDone() && counter >3 && counter < 9  )
         {
-            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(1.0f, 0f), 0.35f, sub.transform.rotation, new Quaternion(0, 0, 0, 0));
+            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(1.0f, 0f), 0.35f, sub.transform.rotation, new Quaternion(0, 0, 0.5f, 0f));
+            counter++;
+          
         }
+        else if (tweener.TweenDone() && counter > 8 && counter < 13)
+        {
+            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(0f, -1.0f), 0.35f, sub.transform.rotation, new Quaternion(0, 0, 0, 0));
+            counter++;
+          
+        }
+        else if (tweener.TweenDone() && counter > 12 && counter < 18)
+        {
+            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(-1.0f, 0f), 0.35f, sub.transform.rotation, new Quaternion(0, 0, 0, 0));
+            counter++;
+           
+        }
+        else if (counter == 18)
+        {
+            counter = 0;
+        }
+
+
+
     }
+
+
+     
 }

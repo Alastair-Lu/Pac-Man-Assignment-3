@@ -5,33 +5,51 @@ using UnityEngine;
 public class Tweener : MonoBehaviour
 {
     private List<Tween> activeTweens = new List<Tween>();
+    private bool ready;
     // Start is called before the first frame update
     void Start()
     {
-        
+        ready = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-        
-        if (activeTweens.Count != 0)
+
+       
+        if (!EmptyList())
         {
             float timer = Time.time - activeTweens[0].StartTime;
             float ratio = timer / activeTweens[0].Duration;
-            if (Vector3.Distance(activeTweens[0].Target.position, activeTweens[0].EndPos) > 0.05f)
+            float ratio2 = timer / 0.1f;
+            Tween current = activeTweens[0];
+            /* if (Quaternion.Angle(current.StartRot, current.EndRot) > 10f)
+             {
+                 current.Target.rotation = Quaternion.Lerp(current.StartRot, current.EndRot, ratio2);
+             }
+             else
+             {
+                 current.Target.rotation = current.EndRot;
+             }*/
+            Debug.Log(current.Target.rotation);
+            current.Target.rotation = current.EndRot;
+            if (Vector3.Distance(current.Target.position, current.EndPos) > 0.05f)
             {
-                activeTweens[0].Target.position = Vector3.Lerp(activeTweens[0].StartPos, activeTweens[0].EndPos, ratio);
+                current.Target.position = Vector3.Lerp(current.StartPos,current.EndPos, ratio);
+                ready = false;
+                
             }
             else
             {
-                activeTweens[0].Target.position = activeTweens[0].EndPos;
-                activeTweens.RemoveAt(0);
-
+                current.Target.position = current.EndPos;
+                activeTweens.Remove(current);
+                ready = true;           
             }
+            
         }
     }
+
+    
     public void AddTween(Transform targetObject, Vector2 startPos, Vector2 endPos, float duration, Quaternion startRot, Quaternion endRot)
     {
         
@@ -46,5 +64,13 @@ public class Tweener : MonoBehaviour
         if (activeTweens.Count == 0)
             return true;
         return false;
+            
+        
+    }
+
+    public bool TweenDone()
+    {
+        return ready; 
+
     }
 }
