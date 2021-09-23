@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class AutoMove : MonoBehaviour
 {
+    private Animator animator;
     private Tweener tweener;
     [SerializeField]
     private GameObject sub;
-    int counter;
+    private int counter;
     // Start is called before the first frame update
     void Start()
     {
         tweener = GetComponent<Tweener>();
         counter = 0;
+        animator = sub.GetComponent<Animator>();
     }
 
     // Update is called once per frame
