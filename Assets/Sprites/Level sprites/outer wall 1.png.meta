@@ -1,22 +1,22 @@
 fileFormatVersion: 2
-guid: cf0ab87656eb62746a99f4bbc29d8e74
+guid: 1a60ae5c6a836b2489f5f0ae82c998b8
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1567282744430733096
-    second: outer walls_0
+      213: 2701053305340034234
+    second: outer wall 1_0
   - first:
-      213: 941974774253615611
-    second: outer walls_1
+      213: -7262266973238560269
+    second: outer wall 1_1
   - first:
-      213: 2235884577533557930
-    second: outer walls_2
+      213: -695863979880515778
+    second: outer wall 1_2
   - first:
-      213: -1856360723537476270
-    second: outer walls_3
+      213: 8878301865375522002
+    second: outer wall 1_3
   - first:
-      213: -3099423605099322576
-    second: outer walls_4
+      213: -4484263178531799402
+    second: outer wall 1_4
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -106,7 +106,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: outer walls_0
+      name: outer wall 1_0
       rect:
         serializedVersion: 2
         x: 0
@@ -120,14 +120,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8d85b93d5a4ef3ae0800000000000000
-      internalID: -1567282744430733096
+      spriteID: abcff20aba11c7520800000000000000
+      internalID: 2701053305340034234
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: outer walls_1
+      name: outer wall 1_1
       rect:
         serializedVersion: 2
         x: 32
@@ -141,14 +141,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bf9f3cef011921d00800000000000000
-      internalID: 941974774253615611
+      spriteID: 3f9701c3aae373b90800000000000000
+      internalID: -7262266973238560269
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: outer walls_2
+      name: outer wall 1_2
       rect:
         serializedVersion: 2
         x: 64
@@ -162,14 +162,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aac79a25d25770f10800000000000000
-      internalID: 2235884577533557930
+      spriteID: e377b3ba56bc756f0800000000000000
+      internalID: -695863979880515778
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: outer walls_3
+      name: outer wall 1_3
       rect:
         serializedVersion: 2
         x: 0
@@ -183,14 +183,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 255cf82e1c1ec36e0800000000000000
-      internalID: -1856360723537476270
+      spriteID: 2dc556ed180163b70800000000000000
+      internalID: 8878301865375522002
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: outer walls_4
+      name: outer wall 1_4
       rect:
         serializedVersion: 2
         x: 32
@@ -204,8 +204,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 033289117a2acf4d0800000000000000
-      internalID: -3099423605099322576
+      spriteID: 69e7f34d562b4c1c0800000000000000
+      internalID: -4484263178531799402
       vertices: []
       indices: 
       edges: []
