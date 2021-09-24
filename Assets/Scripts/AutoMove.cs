@@ -21,25 +21,41 @@ public class AutoMove : MonoBehaviour
     void Update()
     {
         
-        rotation();
-        if (tweener.TweenDone() && counter < 4)
+        
+        if (tweener.TweenDone() && counter <= 3)
         {
+            animator.SetBool("TU", true);
+            animator.SetBool("TR", false);
+            animator.SetBool("TL", false);
+            animator.SetBool("TD", false);
             tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(0f, 1.0f), 0.35f);
-            counter++;
-            
+            counter++;            
         }
-        else if (tweener.TweenDone() && counter >3 && counter < 9  )
+        else if (tweener.TweenDone() && counter >3 && counter <= 8  )
         {
-            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(1.0f, 0f), 0.35f);            
+            animator.SetBool("TR", true);
+            animator.SetBool("TU", false);            
+            animator.SetBool("TL", false);
+            animator.SetBool("TD", false);
+            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(1.0f, 0f), 0.35f);
+            counter++;
+
+        }
+        else if (tweener.TweenDone() && counter > 8 && counter <= 12)
+        {
+            animator.SetBool("TD", true);
+            animator.SetBool("TU", false);
+            animator.SetBool("TR", false);
+            animator.SetBool("TL", false);
+            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(0f, -1.0f), 0.35f);
             counter++;
         }
-        else if (tweener.TweenDone() && counter > 8 && counter < 13)
+        else if (tweener.TweenDone() && counter > 12 && counter <= 17)
         {
-            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(0f, -1.0f), 0.35f);            
-            counter++;
-        }
-        else if (tweener.TweenDone() && counter > 12 && counter < 18)
-        {
+            animator.SetBool("TL", true);
+            animator.SetBool("TU", false);
+            animator.SetBool("TR", false);            
+            animator.SetBool("TD", false);
             tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(-1.0f, 0f), 0.35f);
             counter++;
         }
@@ -47,35 +63,11 @@ public class AutoMove : MonoBehaviour
         {
             counter = 0;
         }
-
-
-
+        
+       
     }
 
-    void rotation()
-    {
-        switch (counter)
-        {
-            case 0:
-                animator.SetTrigger("TurnUp");
-                Debug.Log(counter);
-                break;
-            case 5:
-                animator.SetTrigger("TurnRight");
-                Debug.Log(counter);
-                break;
-            case 10:
-                animator.SetTrigger("TurnDown");
-                Debug.Log(counter);
-                break;
-            case 14:
-                animator.SetTrigger("TurnLeft");
-                Debug.Log(counter);
-                break;
-            default:
-                break;
-        }
-    } 
+   
 
 
      
