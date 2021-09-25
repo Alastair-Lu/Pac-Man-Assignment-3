@@ -3,15 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class LevelGen : MonoBehaviour
 {
     List<List<int>> Grid = new List<List<int>>();
     private bool HasTeleporterBottom;
     private bool HasTeleporterSide = true;
+    public Sprite[] square;
+    public GameObject GridObj;
+    public GameObject TilePrefab;
+    public GameObject ExistingPP;
+    public GameObject ExistingGrid;
+    public GameObject PowerPellet;
     // Start is called before the first frame update
     void Start()
     {
+        ExistingGrid.SetActive(false);
+        ExistingPP.SetActive(false);
         var rows = File.ReadAllLines("Assets/Scripts/PacManLevel.csv");
         
 
@@ -83,6 +92,15 @@ public class LevelGen : MonoBehaviour
 
             }            
         }
+
+        for(int i = 0; i < Grid.Count;i++)
+        {
+            for(int j = 0; j < Grid[i].Count; j++)
+            {
+                float colourValue = Random.Range(0.0f, 1.0f);
+                SpawnTile(j, i, colourValue);
+            }
+        }
     }
 
     // Update is called once per frame
@@ -105,9 +123,24 @@ public class LevelGen : MonoBehaviour
         return false;
     }
 
-    private void SpawnTile(int x, int y)
+    private Vector2 WorldPosition(int x, int y)
+    {
+        return new Vector2((float)x - (((float)Grid[y].Count) / 2) + 0.5f, ((float)y - (float)Grid.Count / 2) + 1.0f);
+    }
+    private void SpawnTile(int x, int y, float value)
     {
 
+        GameObject tile = Instantiate(TilePrefab, WorldPosition(x, y), Quaternion.identity);
+        tile.transform.parent = GridObj.transform;
+        var s = tile.GetComponent<SpriteRenderer>();
+        s.sprite = square[Grid[y][x]];
+        if(Grid[y][x] == 6)
+        {
+            Instantiate(PowerPellet, WorldPosition(x, y), Quaternion.identity);
+        }
+        
     }
+
+  
 
 }
