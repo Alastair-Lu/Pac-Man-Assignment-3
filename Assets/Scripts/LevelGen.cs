@@ -16,6 +16,7 @@ public class LevelGen : MonoBehaviour
     public GameObject ExistingPP;
     public GameObject ExistingGrid;
     public GameObject PowerPellet;
+    private List<List<Transform>> ObjList = new List<List<Transform>>();
     // Start is called before the first frame update
     void Start()
     {
@@ -77,12 +78,6 @@ public class LevelGen : MonoBehaviour
             {
                 Grid.Add(Grid[i - 2]);
             }
-            Debug.Log(Grid[0][0] + " " + Grid[1][0] + " " + Grid[2][0] + " " + Grid[3][0] + " " + Grid[4][0] + " " + Grid[5][0] + " " + Grid[6][0] + " " + Grid[7][0] + " " + Grid[8][0] + " " +
-                Grid[9][0] + " " + Grid[10][0] + " " + Grid[11][0] + " " + Grid[12][0] + " " + Grid[13][0] + " " + Grid[14][0] + " " + Grid[15][0] + " " + Grid[16][0] + " " + Grid[17][0] + " " +
-                Grid[18][0] + " " + Grid[19][0] + " " + Grid[20][0]);
-            Debug.Log(Grid[0][0] + " " + Grid[0][1] + " " + Grid[0][2] + " " + Grid[0][3] + " " + Grid[0][4] + " " + Grid[0][5] + " " + Grid[0][6] + " " + Grid[0][7] + " " + Grid[0][8] + " " +
-                Grid[0][9] + " " + Grid[0][10] + " " + Grid[0][11] + " " + Grid[0][12] + " " + Grid[0][13] + " " + Grid[0][14] + " " + Grid[0][15] + " " + Grid[0][16] + " " + Grid[0][17] + " " +
-                Grid[0][18] + " " + Grid[0][19] + " " + Grid[0][20]);
         }
         else
         {
@@ -92,15 +87,21 @@ public class LevelGen : MonoBehaviour
 
             }            
         }
-
+        
         for(int i = 0; i < Grid.Count;i++)
         {
-            for(int j = 0; j < Grid[i].Count; j++)
-            {
-                float colourValue = Random.Range(0.0f, 1.0f);
-                SpawnTile(j, i, colourValue);
+            ObjList.Add(new List<Transform>());
+            
+            for (int j = 0; j < Grid[i].Count; j++)
+            {                
+                ObjList[i].Add( SpawnTile(j, i).transform);
+                
             }
+            Debug.Log(ObjList[i].Count + " "+Grid[i].Count);
+            Debug.Log(ObjList.Count + " " + Grid.Count);
         }
+
+
     }
 
     // Update is called once per frame
@@ -125,22 +126,250 @@ public class LevelGen : MonoBehaviour
 
     private Vector2 WorldPosition(int x, int y)
     {
-        return new Vector2((float)x - (((float)Grid[y].Count) / 2) + 0.5f, ((float)y - (float)Grid.Count / 2) + 1.0f);
+        return new Vector2((float)x - (((float)Grid[y].Count) / 2) + 0.5f, ((float)Grid.Count / 2)- (float)y  );
     }
-    private void SpawnTile(int x, int y, float value)
+    private GameObject SpawnTile(int x, int y)
     {
 
         GameObject tile = Instantiate(TilePrefab, WorldPosition(x, y), Quaternion.identity);
+        tile.name = ("X: " + x + " Y: " + y);
         tile.transform.parent = GridObj.transform;
         var s = tile.GetComponent<SpriteRenderer>();
         s.sprite = square[Grid[y][x]];
-        if(Grid[y][x] == 6)
+        if (Grid[y][x] == 6)
         {
-            Instantiate(PowerPellet, WorldPosition(x, y), Quaternion.identity);
+            Instantiate(PowerPellet, WorldPosition(x, y), Quaternion.identity).transform.parent = GridObj.transform;
+        }
+        Rotation(x, y, tile);
+        if (x != 0 && y != 0 && x != Grid[y].Count - 1 && y != Grid.Count - 1)
+        {
+            InnerRotate(x, y, tile);
+        }
+        return tile;
+    }
+
+    private void Rotation(int x, int y, GameObject tile)
+    {
+        Vector3 rotate90 = new Vector3(0, 0, 90);
+        Vector3 rotate270 = new Vector3(0, 0, -90);
+        Vector3 rotate180 = new Vector3(0, 0, 180);
+        int grid = Grid[y][x];
+        if (x == Grid[y].Count-1 && y == 0)
+        {
+            tile.transform.eulerAngles = rotate270;
+        }
+        if (x == 0 && y == Grid.Count-1)
+        {
+            tile.transform.eulerAngles = rotate90;
+        }
+        if (x == Grid[y].Count-1 && y == Grid.Count - 1)
+        {
+            tile.transform.eulerAngles = rotate180;
+        }
+        if (y == 0 && x>0 && x < Grid[y].Count-1)
+        {
+            if (grid != 7)
+            {
+                tile.transform.eulerAngles = rotate90;
+            }
+            else
+            {
+                tile.transform.eulerAngles = rotate90;
+            }
+            if(grid == 1)
+            {
+                if (Grid[y][x - 1] != 0)
+                {
+                    tile.transform.eulerAngles = rotate270;
+                }
+            }
+        }
+        if (y == Grid.Count-1 && x > 0 && x < Grid[y].Count - 1)
+        {         
+            tile.transform.eulerAngles = rotate90;
+            
+            if (grid == 1)
+            {
+                if (Grid[y][x - 1] != 0)
+                {
+                    tile.transform.eulerAngles = rotate270;
+                }
+            }
+            if (grid == 7)
+            {
+                tile.transform.eulerAngles = rotate270;
+            }
+        }
+        if (x == 0 && y > 0 && y < Grid.Count - 1)
+        {
+            if (grid == 7)
+            {
+                tile.transform.eulerAngles = rotate180;
+            }
+            if (grid == 1)
+            {
+                if (Grid[y - 1][x] != 0)
+                {
+                    tile.transform.eulerAngles = rotate90;
+                }
+            }
+            if(grid == 2)
+            {
+                if(Grid[y - 1][x] == 0 || Grid[y + 1][x] == 0)
+                {
+                    tile.transform.eulerAngles = rotate90;
+                }
+            }
+        }
+        if (x == Grid[y].Count-1 && y > 0 && y < Grid.Count - 1)
+        {
+            
+            if (grid == 1)
+            {
+                if (Grid[y - 1][x] != 0)
+                {
+                    tile.transform.eulerAngles = rotate180;
+                }
+                else
+                {
+                    tile.transform.eulerAngles = rotate270;
+                }
+            }
+            if (grid == 2)
+            {
+                if (Grid[y - 1][x] == 0 || Grid[y + 1][x] == 0)
+                {
+                    tile.transform.eulerAngles = rotate90;
+                }
+            }
         }
         
     }
+    private void InnerRotate(int x, int y, GameObject tile)
+    {
+        Vector3 rotate0 = new Vector3(0, 0, 0);
+        Vector3 rotate90 = new Vector3(0, 0, 90);
+        Vector3 rotate270 = new Vector3(0, 0, 270);
+        Vector3 rotate180 = new Vector3(0, 0, 180);
+        int grid = Grid[y][x];
 
-  
+        int gridL = Grid[y][x - 1];
+        Transform gridLO = ObjList[y][x - 1];
+        int gridT = Grid[y - 1][x];
+        Transform gridTO = ObjList[y - 1][x];
+        int gridR = Grid[y][x + 1];        
+        int gridD = Grid[y + 1][x];
+        if (x > 0 && x < Grid[y].Count - 1 && y > 0 && y < Grid.Count - 1)
+        {
+            if (grid == 1)
+            {
+                if (gridL == 2)
+                {
+                    if (gridT == 2)
+                    {
+                        tile.transform.eulerAngles = rotate180;
+                    }
+                    else
+                    {
+                        tile.transform.eulerAngles = rotate270;
+                    }
+                }
+                if (gridR == 2 && gridT == 2)
+                {
+                    tile.transform.eulerAngles = rotate90;
+                }
+            }
+            if(grid== 2 && (gridR==2||gridL==2))
+            {
+                tile.transform.eulerAngles = rotate90;
+            }
+            if (grid == 7)
+            {
+                if (gridT == 3 || gridT == 4)
+                {
+                    tile.transform.eulerAngles = rotate270;
+                }
+                if (gridR == 3 || gridR == 4)
+                {
+                    tile.transform.eulerAngles = rotate180;
+                }
+                if (gridD == 3 || gridD == 4)
+                {
+                    tile.transform.eulerAngles = rotate90;
+                }
+
+            }
+            if (grid == 4)
+            {
+                if(gridT==0 || gridT == 5 || gridT == 6 || gridD==0 || gridD == 5 || gridD == 6)
+                {
+                    tile.transform.eulerAngles = rotate90;
+                }
+            }
+
+            if (grid == 3)
+            {
+                if (gridT == 0 || gridT == 5 || gridT == 6)
+                {
+                    if (gridR == 0 || gridR == 5 || gridR == 6)
+                    {
+                        tile.transform.eulerAngles = rotate270;
+                    }
+                    else if (gridL == 0 || gridL == 5 || gridL == 6)
+                    {
+
+                    }
+                }
+                if (gridD == 0 || gridD == 5 || gridD == 6)
+                {
+                    if (gridR == 0 || gridR == 5 || gridR == 6)
+                    {
+                        tile.transform.eulerAngles = rotate180;
+                    }
+                    else if(gridL == 0 || gridL == 5 || gridL == 6)
+                    {
+                        tile.transform.eulerAngles = rotate90;
+                    }
+                }
+                if (gridR == 0 || gridR == 5 || gridR == 6)
+                {
+                    if (gridT == 0 || gridT == 5 || gridT == 6)
+                    {
+                        tile.transform.eulerAngles = rotate270;
+                    }
+                    else if (gridD == 0 || gridD == 5 || gridD == 6)
+                    {
+                        tile.transform.eulerAngles = rotate180;
+                    }
+                }
+                if (gridL == 0 || gridL == 5 || gridL == 6)
+                {
+                    if (gridT == 0 || gridT == 5 || gridT == 6)
+                    {
+                        
+                    }
+                    else if (gridD == 0 || gridD == 5 || gridD == 6)
+                    {
+                        tile.transform.eulerAngles = rotate90;
+                    }
+                }
+                if ((gridL==4 && gridLO.eulerAngles == rotate90)||(gridL == 3&&(gridLO.eulerAngles==rotate0||gridLO.eulerAngles==rotate90)))
+                {
+                    if ((gridT == 4 && gridTO.eulerAngles == rotate0) ||(gridT==3&&(gridTO.eulerAngles==rotate0||gridTO.eulerAngles==rotate270)))
+                    {
+                        tile.transform.eulerAngles = rotate180;
+                    }
+                    else
+                    {
+                        tile.transform.eulerAngles = rotate270;
+                    }
+                }
+                if (((gridT == 4 && gridTO.eulerAngles == rotate0)||(gridT==3&&(gridTO.eulerAngles==rotate0||gridTO.eulerAngles==rotate270)))&& (gridL == 4 && gridLO.eulerAngles == rotate0) || (gridL == 3 && (gridLO.eulerAngles != rotate0 || gridLO.eulerAngles != rotate90)))
+                {
+                    tile.transform.eulerAngles = rotate90;
+                }
+            }
+        }
+    }
 
 }
