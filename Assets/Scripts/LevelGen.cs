@@ -40,7 +40,7 @@ public class LevelGen : MonoBehaviour
         
         for (int i = 0; i < Grid.Count; i++)
         {
-            if (Grid[i][Grid[i].Count - 1] == 2 || Grid[i][Grid[i].Count - 1] == 7)
+            if (Grid[i][Grid[i].Count - 1] == 2 || Grid[i][Grid[i].Count - 1] == 7 || Grid[i][Grid[i].Count - 1] == 1)
             {
                 HasTeleporterSide = false;
                 break;
@@ -117,7 +117,7 @@ public class LevelGen : MonoBehaviour
 
     private bool TeleBotCheck()
     {
-        if (!(Grid[Grid.Count - 1].Contains(2)) && !(Grid[Grid.Count - 1].Contains(7)))
+        if (!(Grid[Grid.Count - 1].Contains(2)) && !(Grid[Grid.Count - 1].Contains(7)) && !(Grid[Grid.Count - 1].Contains(1)))
         {
             return true;
         }
@@ -150,6 +150,7 @@ public class LevelGen : MonoBehaviour
 
     private void Rotation(int x, int y, GameObject tile)
     {
+        Vector3 rotate0 = new Vector3(0, 0, 0);
         Vector3 rotate90 = new Vector3(0, 0, 90);
         Vector3 rotate270 = new Vector3(0, 0, -90);
         Vector3 rotate180 = new Vector3(0, 0, 180);
@@ -168,47 +169,65 @@ public class LevelGen : MonoBehaviour
         }
         if (y == 0 && x>0 && x < Grid[y].Count-1)
         {
-            if (grid != 7)
+            int gridL = Grid[y][x - 1];
+            int gridR = Grid[y][x + 1];
+            Transform gridLO = ObjList[y][x - 1];
+            if (gridL != 0 || gridR != 0 )
             {
                 tile.transform.eulerAngles = rotate90;
             }
-            else
+            if (grid == 7)
             {
                 tile.transform.eulerAngles = rotate90;
             }
             if(grid == 1)
             {
-                if (Grid[y][x - 1] != 0)
+                if ((gridL == 2 && gridLO.eulerAngles == rotate90) || gridL == 7 || (gridL == 1 && gridLO.eulerAngles == rotate0))
                 {
                     tile.transform.eulerAngles = rotate270;
+                }
+                else
+                {
+                    tile.transform.eulerAngles = rotate0;
                 }
             }
         }
         if (y == Grid.Count-1 && x > 0 && x < Grid[y].Count - 1)
-        {         
-            tile.transform.eulerAngles = rotate90;
-            
-            if (grid == 1)
+        {
+            int gridL = Grid[y][x - 1];
+            int gridR = Grid[y][x + 1];
+            Transform gridLO = ObjList[y][x - 1];
+            if (gridL != 0 || gridR != 0)
             {
-                if (Grid[y][x - 1] != 0)
-                {
-                    tile.transform.eulerAngles = rotate270;
-                }
+                tile.transform.eulerAngles = rotate90;
             }
             if (grid == 7)
             {
                 tile.transform.eulerAngles = rotate270;
             }
+            if (grid == 1)
+            {
+                if ((gridL == 2 && gridLO.eulerAngles == rotate90) || gridL == 7 || (gridL == 1 && gridLO.eulerAngles == rotate90))
+                {
+                    tile.transform.eulerAngles = rotate180;
+                }
+                else
+                {
+                    tile.transform.eulerAngles = rotate90;
+                }
+            }
         }
         if (x == 0 && y > 0 && y < Grid.Count - 1)
         {
+            int gridT = Grid[y - 1][x];
+            Transform gridTO = ObjList[y - 1][x];
             if (grid == 7)
             {
                 tile.transform.eulerAngles = rotate180;
             }
             if (grid == 1)
             {
-                if (Grid[y - 1][x] != 0)
+                if((gridT == 2 && gridTO.eulerAngles == rotate0) || gridT == 7 || (gridT == 1 && gridTO.eulerAngles == rotate0))
                 {
                     tile.transform.eulerAngles = rotate90;
                 }
@@ -223,14 +242,15 @@ public class LevelGen : MonoBehaviour
         }
         if (x == Grid[y].Count-1 && y > 0 && y < Grid.Count - 1)
         {
-            
+            int gridT = Grid[y - 1][x];
+            Transform gridTO = ObjList[y - 1][x];
             if (grid == 1)
             {
-                if (Grid[y - 1][x] != 0)
+                if ((gridT == 2 && gridTO.eulerAngles == rotate0) || gridT == 7 || (gridT == 1)&&!(gridT == 1 && gridTO.eulerAngles == rotate180))
                 {
                     tile.transform.eulerAngles = rotate180;
                 }
-                else
+                if(gridT == 1 && gridTO.eulerAngles == rotate180) 
                 {
                     tile.transform.eulerAngles = rotate270;
                 }
@@ -263,25 +283,31 @@ public class LevelGen : MonoBehaviour
         {
             if (grid == 1)
             {
-                if (gridL == 2)
+                if ((gridT == 2 && gridTO.eulerAngles == rotate0) || (gridT == 7 && (gridTO.eulerAngles == rotate0 || gridTO.eulerAngles == rotate180)) || (gridT == 1 && (gridTO.eulerAngles == rotate0 || gridTO.eulerAngles == rotate270)))
                 {
-                    if (gridT == 2)
+                    if((gridL==2&&gridLO.eulerAngles==rotate90)|| (gridL == 7 && (gridLO.eulerAngles == rotate90 || gridLO.eulerAngles == rotate270)) || (gridL == 1 && (gridLO.eulerAngles == rotate0 || gridLO.eulerAngles == rotate90)))
                     {
                         tile.transform.eulerAngles = rotate180;
                     }
                     else
                     {
+                        tile.transform.eulerAngles = rotate90;
+                    }
+                }
+                else
+                {
+                    if ((gridL == 2 && gridLO.eulerAngles == rotate90) || (gridL == 7 && (gridLO.eulerAngles == rotate90 || gridLO.eulerAngles == rotate270)) || (gridL == 1 && (gridLO.eulerAngles == rotate0 || gridLO.eulerAngles == rotate90)))
+                    {
                         tile.transform.eulerAngles = rotate270;
                     }
                 }
-                if (gridR == 2 && gridT == 2)
+            }
+            if(grid == 2)
+            {
+                if ((gridL == 2 && gridLO.eulerAngles == rotate90) || (gridL == 7 && (gridLO.eulerAngles == rotate90 || gridLO.eulerAngles == rotate270)) || (gridL == 1 && (gridLO.eulerAngles == rotate0 || gridLO.eulerAngles == rotate90)))
                 {
                     tile.transform.eulerAngles = rotate90;
                 }
-            }
-            if(grid== 2 && (gridR==2||gridL==2))
-            {
-                tile.transform.eulerAngles = rotate90;
             }
             if (grid == 7)
             {
@@ -309,64 +335,23 @@ public class LevelGen : MonoBehaviour
 
             if (grid == 3)
             {
-                if (gridT == 0 || gridT == 5 || gridT == 6)
+                if (gridT == 0 || gridT == 5 || gridT == 6||!((gridT == 3 && (gridTO.eulerAngles == rotate0 || gridTO.eulerAngles == rotate270)) || (gridT == 4 && gridTO.eulerAngles == rotate0) || (gridT == 7 && gridTO.eulerAngles == rotate90)))
                 {
-                    if (gridR == 0 || gridR == 5 || gridR == 6)
+                    if ((gridL == 4 && gridLO.eulerAngles == rotate90) || (gridL == 7 && gridLO.eulerAngles == rotate180) || (gridL == 3 && (gridLO.eulerAngles == rotate0 || gridLO.eulerAngles == rotate90)))
                     {
                         tile.transform.eulerAngles = rotate270;
                     }
-                    else if (gridL == 0 || gridL == 5 || gridL == 6)
-                    {
-
-                    }
                 }
-                if (gridD == 0 || gridD == 5 || gridD == 6)
+                else if ((gridT == 3 && (gridTO.eulerAngles == rotate0||gridTO.eulerAngles==rotate270)) || (gridT == 4&&gridTO.eulerAngles==rotate0) || (gridT == 7 && gridTO.eulerAngles == rotate90))
                 {
-                    if (gridR == 0 || gridR == 5 || gridR == 6)
-                    {
-                        tile.transform.eulerAngles = rotate180;
-                    }
-                    else if(gridL == 0 || gridL == 5 || gridL == 6)
-                    {
-                        tile.transform.eulerAngles = rotate90;
-                    }
-                }
-                if (gridR == 0 || gridR == 5 || gridR == 6)
-                {
-                    if (gridT == 0 || gridT == 5 || gridT == 6)
-                    {
-                        tile.transform.eulerAngles = rotate270;
-                    }
-                    else if (gridD == 0 || gridD == 5 || gridD == 6)
-                    {
-                        tile.transform.eulerAngles = rotate180;
-                    }
-                }
-                if (gridL == 0 || gridL == 5 || gridL == 6)
-                {
-                    if (gridT == 0 || gridT == 5 || gridT == 6)
-                    {
-                        
-                    }
-                    else if (gridD == 0 || gridD == 5 || gridD == 6)
-                    {
-                        tile.transform.eulerAngles = rotate90;
-                    }
-                }
-                if ((gridL==4 && gridLO.eulerAngles == rotate90)||(gridL == 3&&(gridLO.eulerAngles==rotate0||gridLO.eulerAngles==rotate90)))
-                {
-                    if ((gridT == 4 && gridTO.eulerAngles == rotate0) ||(gridT==3&&(gridTO.eulerAngles==rotate0||gridTO.eulerAngles==rotate270)))
+                    if ((gridL == 4 && gridLO.eulerAngles == rotate90) || (gridL == 7 && gridLO.eulerAngles == rotate180) || (gridL == 3 && (gridLO.eulerAngles == rotate0 || gridLO.eulerAngles == rotate90)))
                     {
                         tile.transform.eulerAngles = rotate180;
                     }
                     else
                     {
-                        tile.transform.eulerAngles = rotate270;
+                        tile.transform.eulerAngles = rotate90;
                     }
-                }
-                if (((gridT == 4 && gridTO.eulerAngles == rotate0)||(gridT==3&&(gridTO.eulerAngles==rotate0||gridTO.eulerAngles==rotate270)))&& (gridL == 4 && gridLO.eulerAngles == rotate0) || (gridL == 3 && (gridLO.eulerAngles != rotate0 || gridLO.eulerAngles != rotate90)))
-                {
-                    tile.transform.eulerAngles = rotate90;
                 }
             }
         }
