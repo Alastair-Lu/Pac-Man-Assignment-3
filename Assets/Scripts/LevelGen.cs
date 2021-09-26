@@ -22,7 +22,7 @@ public class LevelGen : MonoBehaviour
     {
         ExistingGrid.SetActive(false);
         ExistingPP.SetActive(false);
-        var rows = File.ReadAllLines("Assets/Scripts/PacManLevel.csv");
+        var rows = File.ReadAllLines("Assets/Scripts/PacMan Level Map.csv");
         
 
         foreach (var row in rows)
