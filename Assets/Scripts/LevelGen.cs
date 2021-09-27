@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 
 public class LevelGen : MonoBehaviour
 {
+    public bool CsvReaderMode;
     List<List<int>> Grid = new List<List<int>>();
     private bool HasTeleporterBottom;
     private bool HasTeleporterSide = true;
@@ -22,20 +23,45 @@ public class LevelGen : MonoBehaviour
     {
         ExistingGrid.SetActive(false);
         ExistingPP.SetActive(false);
-        var rows = File.ReadAllLines("Assets/Scripts/PacMan Level Map.csv");
-        
-
-        foreach (var row in rows)
+        //select which mode to read in procedural values in unity, reads csv by default
+        if (CsvReaderMode)
         {
-            List<int> values = new List<int>();
-            var columns = row.Split(',');
-            foreach (string value in columns)
-            {
-                values.Add(Int32.Parse(value));
-            }
-            Grid.Add(values);
+            var rows = File.ReadAllLines("Assets/Scripts/PacMan Level Map.csv");
 
+
+            foreach (var row in rows)
+            {
+                List<int> values = new List<int>();
+                var columns = row.Split(',');
+                foreach (string value in columns)
+                {
+                    values.Add(Int32.Parse(value));
+                }
+                Grid.Add(values);
+
+            }
         }
+        else
+        {
+            int[,] intarray = new int[,] { { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 7 }, 
+                { 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4 }, { 2, 5, 3, 4, 4, 3, 5, 3, 4, 4, 4, 3, 5, 4 }, 
+                { 2, 6, 4, 0, 0, 4, 5, 4, 0, 0, 0, 4, 5, 4 }, { 2, 5, 3, 4, 4, 3, 5, 3, 4, 4, 4, 3, 5, 3 }, 
+                { 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5 }, { 2, 5, 3, 4, 4, 3, 5, 3, 3, 5, 3, 4, 4, 4 }, 
+                { 2, 5, 3, 4, 4, 3, 5, 4, 4, 5, 3, 4, 4, 3 }, { 2, 5, 5, 5, 5, 5, 5, 4, 4, 5, 5, 5, 5, 4 }, 
+                { 1, 2, 2, 2, 2, 1, 5, 4, 3, 4, 4, 3, 0, 4 }, { 0, 0, 0, 0, 0, 2, 5, 4, 3, 4, 4, 3, 0, 3 }, 
+                { 0, 0, 0, 0, 0, 2, 5, 4, 4, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 2, 5, 4, 4, 0, 3, 4, 4, 0 }, 
+                { 2, 2, 2, 2, 2, 1, 5, 3, 3, 0, 4, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 4, 0, 0, 0 }, };
+            for (int i = 0; i < intarray.GetLength(0); i++)
+            {
+                List<int> row = new List<int>();
+                for(int j = 0;j < intarray.GetLength(1); j++)
+                {
+                    row.Add(intarray[i,j]);
+                }
+                Grid.Add(row);
+            }
+        }
+        
         HasTeleporterBottom = TeleBotCheck();
         
         for (int i = 0; i < Grid.Count; i++)
@@ -44,6 +70,10 @@ public class LevelGen : MonoBehaviour
             {
                 HasTeleporterSide = false;
                 break;
+            }
+            else
+            {
+                HasTeleporterSide = true;
             }
             
             
@@ -96,24 +126,14 @@ public class LevelGen : MonoBehaviour
             {                
                 ObjList[i].Add( SpawnTile(j, i).transform);
                 
-            }
-            Debug.Log(ObjList[i].Count + " "+Grid[i].Count);
-            Debug.Log(ObjList.Count + " " + Grid.Count);
+            }            
         }
 
 
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            Debug.Log("value "+Grid[1][1]);
-            Debug.Log(HasTeleporterSide);
-        }
-        
-    }
+
 
     private bool TeleBotCheck()
     {

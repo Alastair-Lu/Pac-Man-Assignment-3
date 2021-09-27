@@ -21,7 +21,7 @@ public class AudioPlayer : MonoBehaviour
         {
             timer += Time.deltaTime;
         }
-        if (!StartMusic.isPlaying && !startPlaying &&timer > 0.45f)
+        if (!StartMusic.isPlaying && !startPlaying &&timer > 0.75f)
         {
             StartMain.Play();
             startPlaying = true;
