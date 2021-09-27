@@ -5,7 +5,7 @@ using System.IO;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class LevelGen : MonoBehaviour
+public class LevelGenerator : MonoBehaviour
 {
     public bool CsvReaderMode;
     List<List<int>> Grid = new List<List<int>>();
@@ -117,8 +117,8 @@ public class LevelGen : MonoBehaviour
 
             }            
         }
-        
-        for(int i = 0; i < Grid.Count;i++)
+        Debug.Log("bottom " + HasTeleporterBottom + " side " + HasTeleporterSide);
+        for (int i = 0; i < Grid.Count;i++)
         {
             ObjList.Add(new List<Transform>());
             

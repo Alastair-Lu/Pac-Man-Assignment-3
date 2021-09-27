@@ -27,7 +27,7 @@ public class AutoMove : MonoBehaviour
             animator.SetBool("TU", true);
             animator.SetBool("TR", false);
             animator.SetBool("TL", false);
-            animator.SetBool("TD", false);
+            animator.SetBool("TD", false);            
             tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(0f, 1.0f), 0.35f);
             counter++;            
         }
