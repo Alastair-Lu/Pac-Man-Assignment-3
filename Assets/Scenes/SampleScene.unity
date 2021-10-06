@@ -1185,7 +1185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47c610e9f43a2984b99b54031c9a1bc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CsvReaderMode: 1
+  CsvReaderMode: 0
   square:
   - {fileID: 0}
   - {fileID: -4484263178531799402, guid: 1a60ae5c6a836b2489f5f0ae82c998b8, type: 3}
@@ -8601,7 +8601,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1937488723}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -12.5, y: 9.5, z: 0}
+  m_LocalPosition: {x: -12.5, y: 13.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2078306483}
@@ -8835,6 +8835,7 @@ GameObject:
   - component: {fileID: 2078306483}
   - component: {fileID: 2078306482}
   - component: {fileID: 2078306481}
+  - component: {fileID: 2078306484}
   m_Layer: 0
   m_Name: MovementController
   m_TagString: Untagged
@@ -8861,7 +8862,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2078306480}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d741c896dccdf4488f60acc5df9cfba, type: 3}
   m_Name: 
@@ -8882,6 +8883,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2078306484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2078306480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a780408477e1f54d9f3542b30ab94c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tweener: {fileID: 2078306481}
+  sub: {fileID: 1937488723}
+  animator: {fileID: 1937488726}
 --- !u!1 &2106258429
 GameObject:
   m_ObjectHideFlags: 0

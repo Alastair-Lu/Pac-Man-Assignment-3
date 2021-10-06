@@ -117,7 +117,7 @@ public class LevelGenerator : MonoBehaviour
 
             }            
         }
-        Debug.Log("bottom " + HasTeleporterBottom + " side " + HasTeleporterSide);
+        //Debug.Log("bottom " + HasTeleporterBottom + " side " + HasTeleporterSide);
         for (int i = 0; i < Grid.Count;i++)
         {
             ObjList.Add(new List<Transform>());

@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Tweener : MonoBehaviour
 {
-    private List<Tween> activeTweens = new List<Tween>();
-    private bool ready;
+    private Tween activeTween;
+    private bool ready = true;
     // Start is called before the first frame update
     void Start()
     {
-        ready = true;
+              
     }
 
     // Update is called once per frame
@@ -17,12 +17,12 @@ public class Tweener : MonoBehaviour
     {
 
        
-        if (!EmptyList())
+        if (activeTween != null)
         {
-            float timer = Time.time - activeTweens[0].StartTime;
-            float ratio = timer / activeTweens[0].Duration;
+            float timer = Time.time - activeTween.StartTime;
+            float ratio = timer / activeTween.Duration;
             
-            Tween current = activeTweens[0];            
+            Tween current = activeTween;            
             if (Vector3.Distance(current.Target.position, current.EndPos) > 0.05f)
             {
                 current.Target.position = Vector3.Lerp(current.StartPos,current.EndPos, ratio);
@@ -32,7 +32,7 @@ public class Tweener : MonoBehaviour
             else
             {
                 current.Target.position = current.EndPos;
-                activeTweens.Remove(current);
+                activeTween = null;
                 ready = true;           
             }
             
@@ -44,23 +44,13 @@ public class Tweener : MonoBehaviour
     {
         
         {
-            activeTweens.Add(new Tween(targetObject, startPos, endPos, Time.time, duration));
+            activeTween = new Tween(targetObject, startPos, endPos, Time.time, duration);
         }
 
     }
 
-    public bool EmptyList()
-    {
-        if (activeTweens.Count == 0)
-            return true;
-        return false;
-            
-        
-    }
-
     public bool TweenDone()
     {
-        return ready; 
-
+        return activeTween == null; 
     }
 }
