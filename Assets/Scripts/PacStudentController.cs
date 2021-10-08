@@ -5,11 +5,11 @@ using UnityEngine;
 public class PacStudentController : MonoBehaviour
 {
     private static int lastInput = 0;
+    private int currentTween = 0;
     public Tweener tweener;
-    public GameObject sub;
     public Animator animator;
-    private float timer = 0;
     private Vector3 offset;
+    public LevelGenerator grid;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,24 +18,19 @@ public class PacStudentController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        if (Physics.Raycast(sub.transform.position, offset,1f))
-        {
-            lastInput = 0;
-        }
-         
+    {        
         if (Input.GetKeyDown(KeyCode.A))
         {
-            Debug.DrawRay(sub.transform.position + offset, Vector3.left * 1f);
-            if (!(Physics.Raycast(sub.transform.position + offset, Vector3.left, 1f)))
+            Debug.DrawRay(this.transform.position + offset, Vector3.left * 1f);
+            if (!(Physics.Raycast(this.transform.position + offset, Vector3.left, 1f, ~3)))
             {
                 lastInput = 1;
             }
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            Debug.DrawRay(sub.transform.position + offset,Vector3.up * 1f);
-            if (!(Physics.Raycast(sub.transform.position + offset, Vector3.up, 1f)))
+            Debug.DrawRay(this.transform.position + offset,Vector3.up * 1f);
+            if (!(Physics.Raycast(this.transform.position + offset, Vector3.up, 1f, ~3)))
             {
                 lastInput = 2;
             }
@@ -43,16 +38,16 @@ public class PacStudentController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            Debug.DrawRay(sub.transform.position + offset,  Vector3.right * 1f);
-            if (!(Physics.Raycast(sub.transform.position + offset, Vector3.right, 1f)))
+            Debug.DrawRay(this.transform.position + offset,  Vector3.right * 1f);
+            if (!(Physics.Raycast(this.transform.position + offset, Vector3.right, 1f, ~3)))
             {
                 lastInput = 3;
             }
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            Debug.DrawRay(sub.transform.position + offset,  Vector3.down * 1f);
-            if (!(Physics.Raycast(sub.transform.position + offset, Vector3.down, 1f)))
+            Debug.DrawRay(this.transform.position + offset,  Vector3.down * 1f);
+            if (!(Physics.Raycast(this.transform.position + offset, Vector3.down, 1f, ~3)))
             {
                 lastInput = 4;
             }
@@ -61,42 +56,65 @@ public class PacStudentController : MonoBehaviour
         {
             AddMovement();
         }
+
+        if (Physics.Raycast(this.transform.position, offset, 0.60f, ~3) && currentTween == lastInput)
+        {
+            lastInput = 0;
+        }
+
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Collision Enter: " + collision.gameObject.name + " : " + collision.contacts[0].point);
+    }
+
+    /*private void OnCollisionStay(Collision collision)
+    {
+        Debug.Log("Collision Enter: " + collision.gameObject.name + " : " + collision.contacts[0].point);
+        if (collision.gameObject.name.Equals("TeleporterLeft"))
+        {
+            this.transform.Translate(Vector3.right * grid.getY());
+        }
+    }*/
 
     private void AddMovement()
     {
         switch (lastInput)
         {
             case 1:
-                tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(-1.0f, 0f), 0.35f);
-                offset = Vector3.left * 0.2f;
+                tweener.AddTween(this.transform, this.transform.position, (Vector2)this.transform.position + new Vector2(-1.0f, 0f), 0.35f);
+                offset = Vector3.left * 0.49f;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubLeft"))
                 {
-                    animator.SetTrigger("Left");
+                    animator.SetTrigger("Left"); 
+                    currentTween = lastInput;
                 }                
                 break;
             case 2:
-                tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(0f, 1.0f), 0.35f);
-                offset = Vector3.up * 0.2f;
+                tweener.AddTween(this.transform, this.transform.position, (Vector2)this.transform.position + new Vector2(0f, 1.0f), 0.35f);
+                offset = Vector3.up * 0.49f;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubUp"))
                 {
                     animator.SetTrigger("Up");
+                    currentTween = lastInput;
                 }
                 break;
             case 3:
-                tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(1.0f, 0f), 0.35f);
-                offset = Vector3.right * 0.2f;
+                tweener.AddTween(this.transform, this.transform.position, (Vector2)this.transform.position + new Vector2(1.0f, 0f), 0.35f);
+                offset = Vector3.right * 0.49f;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubRIght"))
                 {
                     animator.SetTrigger("Right");
+                    currentTween = lastInput;
                 }
                 break;
             case 4:
-                tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(0f, -1.0f), 0.35f);
-                offset = Vector3.down * 0.2f;
+                tweener.AddTween(this.transform, this.transform.position, (Vector2)this.transform.position + new Vector2(0f, -1.0f), 0.35f);
+                offset = Vector3.down * 0.49f;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubDown"))
                 {
                     animator.SetTrigger("Down");
+                    currentTween = lastInput;
                 }
                 break;
         }

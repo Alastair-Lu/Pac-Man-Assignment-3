@@ -168,6 +168,7 @@ public class LevelGenerator : MonoBehaviour
             BoxCollider collider = tile.AddComponent<BoxCollider>();
             collider.size = new Vector3(1, 1, 0);
             collider.isTrigger = true;
+            tile.layer = 3;
         }
         
         if (Grid[y][x] == 6)
@@ -203,6 +204,14 @@ public class LevelGenerator : MonoBehaviour
         }
         if (y == 0 && x>0 && x < Grid[y].Count-1)
         {
+            if (grid == 0)
+            {
+                tile.name = "TeleporterUp";
+                BoxCollider tele = tile.AddComponent<BoxCollider>();
+                tele.isTrigger = true;
+                tele.center = new Vector3(0, 0.9f, 0);
+                tele.size = new Vector3(1, 1, 0);
+            }
             int gridL = Grid[y][x - 1];
             int gridR = Grid[y][x + 1];
             Transform gridLO = ObjList[y][x - 1];
@@ -228,6 +237,14 @@ public class LevelGenerator : MonoBehaviour
         }
         if (y == Grid.Count-1 && x > 0 && x < Grid[y].Count - 1)
         {
+            if (grid == 0)
+            {
+                tile.name = "TeleporterDown";
+                BoxCollider tele = tile.AddComponent<BoxCollider>();
+                tele.isTrigger = true;
+                tele.center = new Vector3(0, -0.9f, 0);
+                tele.size = new Vector3(1, 1, 0);
+            }
             int gridL = Grid[y][x - 1];
             int gridR = Grid[y][x + 1];
             Transform gridLO = ObjList[y][x - 1];
@@ -253,6 +270,14 @@ public class LevelGenerator : MonoBehaviour
         }
         if (x == 0 && y > 0 && y < Grid.Count - 1)
         {
+            if (grid == 0)
+            {
+                tile.name = "TeleporterLeft";
+                BoxCollider tele = tile.AddComponent<BoxCollider>();
+                tele.isTrigger = true;
+                tele.center = new Vector3(-0.9f, 0, 0);
+                tele.size = new Vector3(1, 1, 0);
+            }
             int gridT = Grid[y - 1][x];
             Transform gridTO = ObjList[y - 1][x];
             if (grid == 7)
@@ -276,6 +301,14 @@ public class LevelGenerator : MonoBehaviour
         }
         if (x == Grid[y].Count-1 && y > 0 && y < Grid.Count - 1)
         {
+            if (grid == 0)
+            {
+                tile.name = "TeleporterRight";
+                BoxCollider tele = tile.AddComponent<BoxCollider>();
+                tele.isTrigger = true;
+                tele.center = new Vector3(0.9f, 0, 0);
+                tele.size = new Vector3(1, 1, 0);
+            }
             int gridT = Grid[y - 1][x];
             Transform gridTO = ObjList[y - 1][x];
             if (grid == 1)
@@ -389,6 +422,16 @@ public class LevelGenerator : MonoBehaviour
                 }
             }
         }
+    }
+
+    public int getY()
+    {
+        return Grid.Count;
+    }
+
+    public int getX()
+    {
+        return Grid[0].Count;
     }
 
 }
