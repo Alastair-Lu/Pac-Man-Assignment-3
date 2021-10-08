@@ -9,6 +9,7 @@ public class PacStudentController : MonoBehaviour
     public GameObject sub;
     public Animator animator;
     private float timer = 0;
+    private Vector3 offset;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,32 +19,47 @@ public class PacStudentController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        Debug.Log(animator.GetCurrentAnimatorStateInfo(0).IsName("SubUp"));
-        if (lastInput != 0)
+        if (Physics.Raycast(sub.transform.position, offset,1f))
         {
-            timer += Time.deltaTime;
+            lastInput = 0;
         }
+         
         if (Input.GetKeyDown(KeyCode.A))
         {
-            lastInput = 1;
+            Debug.DrawRay(sub.transform.position + offset, Vector3.left * 1f);
+            if (!(Physics.Raycast(sub.transform.position + offset, Vector3.left, 1f)))
+            {
+                lastInput = 1;
+            }
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            lastInput = 2;
+            Debug.DrawRay(sub.transform.position + offset,Vector3.up * 1f);
+            if (!(Physics.Raycast(sub.transform.position + offset, Vector3.up, 1f)))
+            {
+                lastInput = 2;
+            }
+
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            lastInput = 3;
+            Debug.DrawRay(sub.transform.position + offset,  Vector3.right * 1f);
+            if (!(Physics.Raycast(sub.transform.position + offset, Vector3.right, 1f)))
+            {
+                lastInput = 3;
+            }
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            lastInput = 4;
+            Debug.DrawRay(sub.transform.position + offset,  Vector3.down * 1f);
+            if (!(Physics.Raycast(sub.transform.position + offset, Vector3.down, 1f)))
+            {
+                lastInput = 4;
+            }
         }
-        if (tweener.TweenDone() && timer > 0.3f)
+        if (tweener.TweenDone())
         {
             AddMovement();
-            timer = 0;
         }
     }
 
@@ -53,6 +69,7 @@ public class PacStudentController : MonoBehaviour
         {
             case 1:
                 tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(-1.0f, 0f), 0.35f);
+                offset = Vector3.left * 0.2f;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubLeft"))
                 {
                     animator.SetTrigger("Left");
@@ -60,6 +77,7 @@ public class PacStudentController : MonoBehaviour
                 break;
             case 2:
                 tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(0f, 1.0f), 0.35f);
+                offset = Vector3.up * 0.2f;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubUp"))
                 {
                     animator.SetTrigger("Up");
@@ -67,6 +85,7 @@ public class PacStudentController : MonoBehaviour
                 break;
             case 3:
                 tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(1.0f, 0f), 0.35f);
+                offset = Vector3.right * 0.2f;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubRIght"))
                 {
                     animator.SetTrigger("Right");
@@ -74,19 +93,12 @@ public class PacStudentController : MonoBehaviour
                 break;
             case 4:
                 tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(0f, -1.0f), 0.35f);
+                offset = Vector3.down * 0.2f;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubDown"))
                 {
                     animator.SetTrigger("Down");
                 }
                 break;
         }
-    }
-
-    private void TriggerReset()
-    {
-        animator.ResetTrigger("Left");
-        animator.ResetTrigger("Up");
-        animator.ResetTrigger("Right");
-        animator.ResetTrigger("Down");
     }
 }
