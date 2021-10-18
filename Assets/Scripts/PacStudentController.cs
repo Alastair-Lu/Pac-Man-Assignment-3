@@ -10,6 +10,7 @@ public class PacStudentController : MonoBehaviour
     public Animator animator;
     private Vector3 offset;
     public LevelGenerator grid;
+    public GameObject sub;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,7 +19,7 @@ public class PacStudentController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {        
+    {
         if (Input.GetKeyDown(KeyCode.A))
         {
             Debug.DrawRay(this.transform.position + offset, Vector3.left * 1f);
@@ -57,25 +58,30 @@ public class PacStudentController : MonoBehaviour
             AddMovement();
         }
 
-        if (Physics.Raycast(this.transform.position, offset, 0.60f, ~3) && currentTween == lastInput)
+        if (Physics.Raycast(this.transform.position, offset, 1f) && currentTween == lastInput)
         {
             lastInput = 0;
+            offset = offset * 0;
         }
 
     }
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("Collision Enter: " + collision.gameObject.name + " : " + collision.contacts[0].point);
-    }
 
-    /*private void OnCollisionStay(Collision collision)
+    private void OnTriggerStay(Collider collision)
     {
-        Debug.Log("Collision Enter: " + collision.gameObject.name + " : " + collision.contacts[0].point);
-        if (collision.gameObject.name.Equals("TeleporterLeft"))
+        if (collision.gameObject.name.Equals("TeleporterLeft") && tweener.TweenDone())
         {
-            this.transform.Translate(Vector3.right * grid.getY());
+            Debug.Log("x:" + grid.getX() + " " + "y:" + grid.getY());
+            sub.transform.position = new Vector3(sub.transform.position.x + grid.getX() - 1, sub.transform.position.y, 0);           
+            lastInput = 1;
         }
-    }*/
+        if (collision.gameObject.name.Equals("TeleporterRight") && tweener.TweenDone())
+        {
+            Debug.Log("x:" + grid.getX() + " " + "y:" + grid.getY());
+            sub.transform.position = new Vector3(sub.transform.position.x - grid.getX() + 1, sub.transform.position.y, 0);
+            lastInput = 3;
+        }
+    }
+
 
     private void AddMovement()
     {
@@ -83,7 +89,7 @@ public class PacStudentController : MonoBehaviour
         {
             case 1:
                 tweener.AddTween(this.transform, this.transform.position, (Vector2)this.transform.position + new Vector2(-1.0f, 0f), 0.35f);
-                offset = Vector3.left * 0.49f;
+                offset = Vector3.left * 0.50f;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubLeft"))
                 {
                     animator.SetTrigger("Left"); 
@@ -92,7 +98,7 @@ public class PacStudentController : MonoBehaviour
                 break;
             case 2:
                 tweener.AddTween(this.transform, this.transform.position, (Vector2)this.transform.position + new Vector2(0f, 1.0f), 0.35f);
-                offset = Vector3.up * 0.49f;
+                offset = Vector3.up * 0.50f;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubUp"))
                 {
                     animator.SetTrigger("Up");
@@ -101,7 +107,7 @@ public class PacStudentController : MonoBehaviour
                 break;
             case 3:
                 tweener.AddTween(this.transform, this.transform.position, (Vector2)this.transform.position + new Vector2(1.0f, 0f), 0.35f);
-                offset = Vector3.right * 0.49f;
+                offset = Vector3.right * 0.50f;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubRIght"))
                 {
                     animator.SetTrigger("Right");
@@ -110,7 +116,7 @@ public class PacStudentController : MonoBehaviour
                 break;
             case 4:
                 tweener.AddTween(this.transform, this.transform.position, (Vector2)this.transform.position + new Vector2(0f, -1.0f), 0.35f);
-                offset = Vector3.down * 0.49f;
+                offset = Vector3.down * 0.50f;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubDown"))
                 {
                     animator.SetTrigger("Down");
