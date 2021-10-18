@@ -209,7 +209,7 @@ public class LevelGenerator : MonoBehaviour
                 tile.name = "TeleporterUp";
                 BoxCollider tele = tile.AddComponent<BoxCollider>();
                 tele.isTrigger = true;
-                tele.center = new Vector3(0, 0.9f, 0);
+                tele.center = new Vector3(0, 0.99f, 0);
                 tele.size = new Vector3(1, 1, 0);
             }
             int gridL = Grid[y][x - 1];
@@ -258,7 +258,7 @@ public class LevelGenerator : MonoBehaviour
             }
             if (grid == 1)
             {
-                if ((gridL == 2 && gridLO.eulerAngles == rotate90) || gridL == 7 || (gridL == 1 && gridLO.eulerAngles == rotate90))
+                if ((gridL == 2 && gridLO.eulerAngles == rotate90) || gridL == 7 || (gridL == 1 && gridLO.eulerAngles == rotate90) )
                 {
                     tile.transform.eulerAngles = rotate180;
                 }
@@ -306,7 +306,7 @@ public class LevelGenerator : MonoBehaviour
                 tile.name = "TeleporterRight";
                 BoxCollider tele = tile.AddComponent<BoxCollider>();
                 tele.isTrigger = true;
-                tele.center = new Vector3(0.9f, 0, 0);
+                tele.center = new Vector3(0.99f, 0, 0);
                 tele.size = new Vector3(1, 1, 0);
             }
             int gridT = Grid[y - 1][x];
@@ -316,6 +316,10 @@ public class LevelGenerator : MonoBehaviour
                 if ((gridT == 2 && gridTO.eulerAngles == rotate0) || gridT == 7 || (gridT == 1)&&!(gridT == 1 && gridTO.eulerAngles == rotate180))
                 {
                     tile.transform.eulerAngles = rotate180;
+                }
+                else
+                {
+                    tile.transform.eulerAngles = rotate270;
                 }
                 if(gridT == 1 && gridTO.eulerAngles == rotate180) 
                 {

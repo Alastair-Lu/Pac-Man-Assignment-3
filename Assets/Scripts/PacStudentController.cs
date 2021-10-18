@@ -70,15 +70,23 @@ public class PacStudentController : MonoBehaviour
     {
         if (collision.gameObject.name.Equals("TeleporterLeft") && tweener.TweenDone())
         {
-            Debug.Log("x:" + grid.getX() + " " + "y:" + grid.getY());
             sub.transform.position = new Vector3(sub.transform.position.x + grid.getX() - 1, sub.transform.position.y, 0);           
             lastInput = 1;
         }
         if (collision.gameObject.name.Equals("TeleporterRight") && tweener.TweenDone())
         {
-            Debug.Log("x:" + grid.getX() + " " + "y:" + grid.getY());
             sub.transform.position = new Vector3(sub.transform.position.x - grid.getX() + 1, sub.transform.position.y, 0);
             lastInput = 3;
+        }
+        if (collision.gameObject.name.Equals("TeleporterTop") && tweener.TweenDone())
+        {
+            sub.transform.position = new Vector3(sub.transform.position.x , sub.transform.position.y - grid.getY() + 1, 0);
+            lastInput = 2;
+        }
+        if (collision.gameObject.name.Equals("TeleporterDown") && tweener.TweenDone())
+        {
+            sub.transform.position = new Vector3(sub.transform.position.x, sub.transform.position.y + grid.getY() - 1, 0);
+            lastInput = 4;
         }
     }
 
