@@ -209,7 +209,7 @@ public class LevelGenerator : MonoBehaviour
                 tile.name = "TeleporterUp";
                 BoxCollider tele = tile.AddComponent<BoxCollider>();
                 tele.isTrigger = true;
-                tele.center = new Vector3(0, 0.99f, 0);
+                tele.center = new Vector3(0.99f, 0, 0);
                 tele.size = new Vector3(1, 1, 0);
             }
             int gridL = Grid[y][x - 1];
@@ -242,7 +242,7 @@ public class LevelGenerator : MonoBehaviour
                 tile.name = "TeleporterDown";
                 BoxCollider tele = tile.AddComponent<BoxCollider>();
                 tele.isTrigger = true;
-                tele.center = new Vector3(0, -0.99f, 0);
+                tele.center = new Vector3(-0.99f, 0, 0);
                 tele.size = new Vector3(1, 1, 0);
             }
             int gridL = Grid[y][x - 1];

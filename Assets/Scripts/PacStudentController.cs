@@ -66,8 +66,14 @@ public class PacStudentController : MonoBehaviour
 
     }
 
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        Debug.Log(collision.name);
+    }
+
     private void OnTriggerStay(Collider collision)
     {
+        Debug.Log("test");
         if (collision.gameObject.name.Equals("TeleporterLeft") && tweener.TweenDone())
         {
             sub.transform.position = new Vector3(sub.transform.position.x + grid.getX() - 1, sub.transform.position.y, 0);           
@@ -78,7 +84,7 @@ public class PacStudentController : MonoBehaviour
             sub.transform.position = new Vector3(sub.transform.position.x - grid.getX() + 1, sub.transform.position.y, 0);
             lastInput = 3;
         }
-        if (collision.gameObject.name.Equals("TeleporterTop") && tweener.TweenDone())
+        if (collision.gameObject.name.Equals("TeleporterUp") && tweener.TweenDone())
         {
             sub.transform.position = new Vector3(sub.transform.position.x , sub.transform.position.y - grid.getY() + 1, 0);
             lastInput = 2;
