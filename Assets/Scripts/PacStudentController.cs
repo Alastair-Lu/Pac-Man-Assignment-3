@@ -6,10 +6,8 @@ public class PacStudentController : MonoBehaviour
 {
     private static int lastInput = 0;
     private static int currentInput;
-    private int currentTween = 0;
     public Tweener tweener;
     public Animator animator;
-    private Vector3 offset;
     public LevelGenerator grid;
     public GameObject sub;
     private Vector3 check;
@@ -25,48 +23,34 @@ public class PacStudentController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            Debug.DrawRay(this.transform.position + offset, Vector3.left * 1f);
-            
                 lastInput = 1;
                 check = Vector3.left;
-            
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            Debug.DrawRay(this.transform.position + offset,Vector3.up * 1f);
-            
                 lastInput = 2;
                 check = Vector3.up;
-            
-
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            Debug.DrawRay(this.transform.position + offset,  Vector3.right * 1f);
-            
                 lastInput = 3;
                 check = Vector3.right;
-            
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            Debug.DrawRay(this.transform.position + offset,  Vector3.down * 1f);
-            
                 lastInput = 4;
                 check = Vector3.down;
-            
         }
         if (tweener.TweenDone())
         {
-            if (!(Physics.Raycast(this.transform.position, check, 1f, ~3)))
+            if (!(Physics.Raycast(this.transform.position, check, 1f, ~3)) && lastInput != currentInput)
             {
                 AddMovement(lastInput);
             }
             else
             {
-                if (!(Physics.Raycast(this.transform.position,forwardCheck,1f,~3)))
+                if (!Physics.Raycast(this.transform.position,forwardCheck,1f,~3))
                 {
-
                     AddMovement(currentInput);
                 }
                 else
@@ -75,13 +59,6 @@ public class PacStudentController : MonoBehaviour
                 }
             }
         }
-
-        if (Physics.Raycast(this.transform.position, offset, 1f) && currentTween == lastInput)
-        {
-            lastInput = 0;
-            offset = offset * 0;
-        }
-
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -91,7 +68,6 @@ public class PacStudentController : MonoBehaviour
 
     private void OnTriggerStay(Collider collision)
     {
-        Debug.Log("test");
         if (collision.gameObject.name.Equals("TeleporterLeft") && tweener.TweenDone())
         {
             sub.transform.position = new Vector3(sub.transform.position.x + grid.getX() - 1, sub.transform.position.y, 0);           
@@ -125,8 +101,7 @@ public class PacStudentController : MonoBehaviour
                 forwardCheck = Vector3.left;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubLeft"))
                 {
-                    animator.SetTrigger("Left"); 
-                    currentTween = lastInput;
+                    animator.SetTrigger("Left");
                 }                
                 break;
             case 2:
@@ -136,7 +111,6 @@ public class PacStudentController : MonoBehaviour
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubUp"))
                 {
                     animator.SetTrigger("Up");
-                    currentTween = lastInput;
                 }
                 break;
             case 3:
@@ -146,7 +120,6 @@ public class PacStudentController : MonoBehaviour
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubRIght"))
                 {
                     animator.SetTrigger("Right");
-                    currentTween = lastInput;
                 }
                 break;
             case 4:
@@ -156,7 +129,6 @@ public class PacStudentController : MonoBehaviour
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubDown"))
                 {
                     animator.SetTrigger("Down");
-                    currentTween = lastInput;
                 }
                 break;
         }

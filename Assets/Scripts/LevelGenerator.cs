@@ -207,6 +207,7 @@ public class LevelGenerator : MonoBehaviour
             if (grid == 0)
             {
                 tile.name = "TeleporterUp";
+                tile.layer = 3;
                 BoxCollider tele = tile.AddComponent<BoxCollider>();
                 tele.isTrigger = true;
                 tele.center = new Vector3(0.99f, 0, 0);
@@ -240,6 +241,7 @@ public class LevelGenerator : MonoBehaviour
             if (grid == 0)
             {
                 tile.name = "TeleporterDown";
+                tile.layer = 3;
                 BoxCollider tele = tile.AddComponent<BoxCollider>();
                 tele.isTrigger = true;
                 tele.center = new Vector3(-0.99f, 0, 0);
@@ -273,6 +275,7 @@ public class LevelGenerator : MonoBehaviour
             if (grid == 0)
             {
                 tile.name = "TeleporterLeft";
+                tile.layer = 3;
                 BoxCollider tele = tile.AddComponent<BoxCollider>();
                 tele.isTrigger = true;
                 tele.center = new Vector3(-0.99f, 0, 0);
@@ -304,6 +307,7 @@ public class LevelGenerator : MonoBehaviour
             if (grid == 0)
             {
                 tile.name = "TeleporterRight";
+                tile.layer = 3;
                 BoxCollider tele = tile.AddComponent<BoxCollider>();
                 tele.isTrigger = true;
                 tele.center = new Vector3(0.99f, 0, 0);
