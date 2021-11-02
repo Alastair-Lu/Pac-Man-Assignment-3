@@ -16,8 +16,8 @@ public class Tweener : MonoBehaviour
     void Update()
     {
 
-       
-        if (activeTween != null)
+
+        if (activeTween != null && activeTween.Target != null)
         {
             float timer = Time.time - activeTween.StartTime;
             float ratio = timer / activeTween.Duration;
@@ -33,18 +33,26 @@ public class Tweener : MonoBehaviour
             {
                 current.Target.position = current.EndPos;
                 activeTween = null;
-                ready = true;           
+                ready = true;
+                if (current.Destroy)
+                {
+                    Destroy(current.Target.gameObject);
+                }
             }
             
+        }
+        else
+        {
+            activeTween = null;
         }
     }
 
     
-    public void AddTween(Transform targetObject, Vector2 startPos, Vector2 endPos, float duration)
+    public void AddTween(Transform targetObject, Vector2 startPos, Vector2 endPos, float duration, bool destroy)
     {
         
         {
-            activeTween = new Tween(targetObject, startPos, endPos, Time.time, duration);
+            activeTween = new Tween(targetObject, startPos, endPos, Time.time, duration, destroy);
         }
 
     }
@@ -53,4 +61,6 @@ public class Tweener : MonoBehaviour
     {
         return activeTween == null; 
     }
+
+
 }

@@ -28,7 +28,7 @@ public class AutoMove : MonoBehaviour
             animator.SetBool("TR", false);
             animator.SetBool("TL", false);
             animator.SetBool("TD", false);            
-            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(0f, 1.0f), 0.35f);
+            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(0f, 1.0f), 0.35f, false);
             counter++;            
         }
         else if (tweener.TweenDone() && counter >3 && counter <= 8  )
@@ -37,7 +37,7 @@ public class AutoMove : MonoBehaviour
             animator.SetBool("TU", false);            
             animator.SetBool("TL", false);
             animator.SetBool("TD", false);
-            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(1.0f, 0f), 0.35f);
+            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(1.0f, 0f), 0.35f, false);
             counter++;
 
         }
@@ -47,7 +47,7 @@ public class AutoMove : MonoBehaviour
             animator.SetBool("TU", false);
             animator.SetBool("TR", false);
             animator.SetBool("TL", false);
-            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(0f, -1.0f), 0.35f);
+            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(0f, -1.0f), 0.35f, false);
             counter++;
         }
         else if (tweener.TweenDone() && counter > 12 && counter <= 17)
@@ -56,7 +56,7 @@ public class AutoMove : MonoBehaviour
             animator.SetBool("TU", false);
             animator.SetBool("TR", false);            
             animator.SetBool("TD", false);
-            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(-1.0f, 0f), 0.35f);
+            tweener.AddTween(sub.transform, sub.transform.position, (Vector2)sub.transform.position + new Vector2(-1.0f, 0f), 0.35f, false);
             counter++;
         }
         else if (counter == 18)

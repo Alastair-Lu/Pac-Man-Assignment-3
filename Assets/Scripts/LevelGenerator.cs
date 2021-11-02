@@ -153,7 +153,7 @@ public class LevelGenerator : MonoBehaviour
 
     private Vector2 WorldPosition(int x, int y)
     {
-        return new Vector2((float)x - (((float)Grid[y].Count) / 2) + 0.5f, ((float)Grid.Count / 2)- (float)y  );
+        return new Vector2((float)x - (((float)Grid[y].Count) / 2) + 0.5f, ((float)Grid.Count / 2)- (float)y - 0.5f );
     }
     private GameObject SpawnTile(int x, int y)
     {
@@ -170,10 +170,18 @@ public class LevelGenerator : MonoBehaviour
             collider.isTrigger = true;
             tile.layer = 3;
         }
-        
+        if (Grid[y][x] == 5)
+        {
+            BoxCollider collider = tile.AddComponent<BoxCollider>();
+            collider.size = new Vector3(0.25f, 0.25f, 0);
+            collider.isTrigger = true;
+            tile.tag = "Pellet";
+        }
         if (Grid[y][x] == 6)
         {
-            Instantiate(PowerPellet, WorldPosition(x, y), Quaternion.identity).transform.parent = GridObj.transform;
+            GameObject powerPellet = Instantiate(PowerPellet, WorldPosition(x, y), Quaternion.identity);
+            powerPellet.transform.parent = GridObj.transform;
+            powerPellet.tag = "Big Pellet";
         }
         Rotation(x, y, tile);
         if (x != 0 && y != 0 && x != Grid[y].Count - 1 && y != Grid.Count - 1)
