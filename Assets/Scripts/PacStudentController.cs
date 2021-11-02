@@ -5,19 +5,19 @@ using UnityEngine;
 public class PacStudentController : MonoBehaviour
 {
     private static int lastInput = 0;
-    private static int currentInput;
+    private static int currentInput = 0;
     public Tweener tweener;
     public Animator animator;
     public LevelGenerator grid;
     public GameObject sub;
     private Vector3 check;
     private Vector3 forwardCheck;
+    public ParticleSystem bubbles;
     // Start is called before the first frame update
     void Start()
     {
 
-    }
-
+    }    
     // Update is called once per frame
     void Update()
     {
@@ -41,21 +41,31 @@ public class PacStudentController : MonoBehaviour
                 lastInput = 4;
                 check = Vector3.down;
         }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            animator.speed = 0;
+        }
         if (tweener.TweenDone())
         {
             if (!(Physics.Raycast(this.transform.position, check, 1f, ~3)) && lastInput != currentInput)
             {
+                animator.speed = 1;
                 AddMovement(lastInput);
+                bubbles.Play();
             }
             else
             {
-                if (!Physics.Raycast(this.transform.position,forwardCheck,1f,~3))
+                if (!Physics.Raycast(this.transform.position,forwardCheck,1f,~3) && currentInput != 0)
                 {
+                    animator.speed = 1;
                     AddMovement(currentInput);
+                    bubbles.Play();
                 }
                 else
                 {
                     currentInput = 0;
+                    animator.speed = 0;
+                    bubbles.Stop();
                 }
             }
         }
