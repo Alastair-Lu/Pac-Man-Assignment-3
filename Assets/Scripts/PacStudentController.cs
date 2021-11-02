@@ -22,29 +22,32 @@ public class PacStudentController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if(GameStateManager.currentGameState != (int)GameStateManager.GameState.Dead && GameStateManager.currentGameState != (int)GameStateManager.GameState.GameOver)
         {
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                Debug.Log(GameStateManager.currentGameState + " " + (int)GameStateManager.GameState.Dead);
                 lastInput = 1;
                 check = Vector3.left;
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
+            }
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                Debug.Log(GameStateManager.currentGameState + " " + (int)GameStateManager.GameState.Dead);
                 lastInput = 2;
                 check = Vector3.up;
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
+            }
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                Debug.Log(GameStateManager.currentGameState + " " + (int)GameStateManager.GameState.Dead);
                 lastInput = 3;
                 check = Vector3.right;
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                Debug.Log(GameStateManager.currentGameState + " " + (int)GameStateManager.GameState.Dead);
                 lastInput = 4;
                 check = Vector3.down;
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            animator.speed = 0;
+            }
         }
         if (tweener.TweenDone())
         {
@@ -62,7 +65,7 @@ public class PacStudentController : MonoBehaviour
                     AddMovement(currentInput);
                     bubbles.Play();
                 }
-                else
+                else if (GameStateManager.currentGameState != (int)GameStateManager.GameState.Dead)
                 {
                     currentInput = 0;
                     animator.speed = 0;
@@ -108,11 +111,27 @@ public class PacStudentController : MonoBehaviour
         {
             uimanager.scoreValue += 100;
             Destroy(collision.gameObject);
+            GameStateManager.setGameState((int)GameStateManager.GameState.Scared);
         }
         if (collision.gameObject.tag.Equals("Cherry"))
         {
             uimanager.scoreValue += 100;
             Destroy(collision.gameObject);
+        }
+        if (collision.gameObject.tag.Equals("Ghost"))
+        {
+            if(GameStateManager.currentGameState == (int)GameStateManager.GameState.Scared)
+            {
+                uimanager.scoreValue += 300;
+            }
+            else
+            {
+                animator.SetTrigger("SubDead");
+                GameStateManager.setGameState((int)GameStateManager.GameState.Dead);
+                lastInput = 0;
+                currentInput = 0;
+                Debug.Log(GameStateManager.currentGameState + " " + (int)GameStateManager.GameState.Dead);
+            }
         }
     }
 
@@ -122,7 +141,7 @@ public class PacStudentController : MonoBehaviour
         switch (input)
         {
             case 1:
-                tweener.AddTween(this.transform, this.transform.position, (Vector2)this.transform.position + new Vector2(-1.0f, 0f), 0.15f, false);
+                tweener.AddTween(this.transform, this.transform.position, (Vector2)this.transform.position + new Vector2(-1.0f, 0f), 0.35f, false);
                 currentInput = input;
                 forwardCheck = Vector3.left;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubLeft"))
@@ -131,7 +150,7 @@ public class PacStudentController : MonoBehaviour
                 }                
                 break;
             case 2:
-                tweener.AddTween(this.transform, this.transform.position, (Vector2)this.transform.position + new Vector2(0f, 1.0f), 0.15f, false);
+                tweener.AddTween(this.transform, this.transform.position, (Vector2)this.transform.position + new Vector2(0f, 1.0f), 0.35f, false);
                 currentInput = input;
                 forwardCheck = Vector3.up;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubUp"))
@@ -140,7 +159,7 @@ public class PacStudentController : MonoBehaviour
                 }
                 break;
             case 3:
-                tweener.AddTween(this.transform, this.transform.position, (Vector2)this.transform.position + new Vector2(1.0f, 0f), 0.15f, false);
+                tweener.AddTween(this.transform, this.transform.position, (Vector2)this.transform.position + new Vector2(1.0f, 0f), 0.35f, false);
                 currentInput = input;
                 forwardCheck = Vector3.right;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubRIght"))
@@ -149,7 +168,7 @@ public class PacStudentController : MonoBehaviour
                 }
                 break;
             case 4:
-                tweener.AddTween(this.transform, this.transform.position, (Vector2)this.transform.position + new Vector2(0f, -1.0f), 0.15f, false);
+                tweener.AddTween(this.transform, this.transform.position, (Vector2)this.transform.position + new Vector2(0f, -1.0f), 0.35f, false);
                 currentInput = input;
                 forwardCheck = Vector3.down;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubDown"))

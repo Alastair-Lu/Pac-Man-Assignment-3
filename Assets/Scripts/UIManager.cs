@@ -7,9 +7,10 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public static float timerValue;
-    private bool runTimer = false;
+    private float ghostTimer = 10;
     private Text timer;
     public Text score;
+    private Text scaredTimer;
     public int scoreValue = 0;
     // Start is called before the first frame update
     void Awake()
@@ -28,12 +29,28 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (runTimer)
+        if (GameStateManager.currentGameState == (int)GameStateManager.GameState.Default || GameStateManager.currentGameState == (int)GameStateManager.GameState.Scared)
         {
             //Debug.Log(timerValue);
             timerValue += Time.deltaTime;
             displayTime(timerValue);
             score.text = scoreValue.ToString();
+        }
+
+        if (GameStateManager.currentGameState == (int)GameStateManager.GameState.Scared)
+        {            
+            scaredTimer.enabled = true;
+            if (ghostTimer > 0)
+            {
+                ghostTimer -= Time.deltaTime;
+                displayScaredTime(ghostTimer);
+            }
+            else
+            {
+                GameStateManager.setGameState((int)GameStateManager.GameState.Default);
+                scaredTimer.enabled = false;
+                ghostTimer = 10;
+            }
         }
         
     
@@ -44,6 +61,7 @@ public class UIManager : MonoBehaviour
         {
             SceneManager.LoadSceneAsync(1,LoadSceneMode.Single);
             SceneManager.sceneLoaded += OnsceneLoaded;
+            GameStateManager.currentGameState = (int)GameStateManager.GameState.LevelStart;
         }
     }
 
@@ -54,13 +72,13 @@ public class UIManager : MonoBehaviour
             Button button = GameObject.FindGameObjectWithTag("QuitButton").GetComponent<Button>();
             button.onClick.AddListener(QuitToStart);
             timer = GameObject.FindGameObjectWithTag("Timer").GetComponent<Text>();
-            score = GameObject.FindGameObjectWithTag("Value").GetComponent<Text>(); 
-            runTimer = true;
+            score = GameObject.FindGameObjectWithTag("Value").GetComponent<Text>();
+            scaredTimer = GameObject.FindGameObjectWithTag("Scared Timer").GetComponent<Text>();
+            scaredTimer.enabled = false;
             SceneManager.sceneLoaded -= OnsceneLoaded;
         }
         if(scene.buildIndex == 0)
         {
-            runTimer = false;
             timerValue = 0;
             Button button = GameObject.FindGameObjectWithTag("Level 1").GetComponent<Button>();
             button.onClick.AddListener(LoadFirstLevel);
@@ -74,10 +92,16 @@ public class UIManager : MonoBehaviour
         float microsecond = Mathf.FloorToInt(time * 100 % 100);
         timer.text = "Time " + string.Format("{0:00}:{1:00}:{2:00}", minute, second, microsecond);
     }
+    public void displayScaredTime(float time)
+    {
+        float second = Mathf.FloorToInt(time % 60) + 1;
+        scaredTimer.text = string.Format("{0:00}", second);
+    }
 
     public void QuitToStart()
     {
         SceneManager.LoadSceneAsync(0,LoadSceneMode.Single);
         SceneManager.sceneLoaded += OnsceneLoaded;
+        GameStateManager.setGameState((int)GameStateManager.GameState.Start);
     }
 }

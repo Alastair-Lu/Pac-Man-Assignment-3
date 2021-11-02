@@ -12,6 +12,8 @@ TagManager:
   - Big Pellet
   - Manager
   - Cherry
+  - Ghost
+  - Scared Timer
   layers:
   - Default
   - TransparentFX
