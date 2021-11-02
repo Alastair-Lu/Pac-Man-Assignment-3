@@ -5,12 +5,15 @@ using UnityEngine;
 public class PacStudentController : MonoBehaviour
 {
     private static int lastInput = 0;
+    private static int currentInput;
     private int currentTween = 0;
     public Tweener tweener;
     public Animator animator;
     private Vector3 offset;
     public LevelGenerator grid;
     public GameObject sub;
+    private Vector3 check;
+    private Vector3 forwardCheck;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,39 +26,54 @@ public class PacStudentController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
         {
             Debug.DrawRay(this.transform.position + offset, Vector3.left * 1f);
-            if (!(Physics.Raycast(this.transform.position + offset, Vector3.left, 1f, ~3)))
-            {
+            
                 lastInput = 1;
-            }
+                check = Vector3.left;
+            
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
             Debug.DrawRay(this.transform.position + offset,Vector3.up * 1f);
-            if (!(Physics.Raycast(this.transform.position + offset, Vector3.up, 1f, ~3)))
-            {
+            
                 lastInput = 2;
-            }
+                check = Vector3.up;
+            
 
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
             Debug.DrawRay(this.transform.position + offset,  Vector3.right * 1f);
-            if (!(Physics.Raycast(this.transform.position + offset, Vector3.right, 1f, ~3)))
-            {
+            
                 lastInput = 3;
-            }
+                check = Vector3.right;
+            
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
             Debug.DrawRay(this.transform.position + offset,  Vector3.down * 1f);
-            if (!(Physics.Raycast(this.transform.position + offset, Vector3.down, 1f, ~3)))
-            {
+            
                 lastInput = 4;
-            }
+                check = Vector3.down;
+            
         }
         if (tweener.TweenDone())
         {
-            AddMovement();
+            if (!(Physics.Raycast(this.transform.position, check, 1f, ~3)))
+            {
+                AddMovement(lastInput);
+            }
+            else
+            {
+                if (!(Physics.Raycast(this.transform.position,forwardCheck,1f,~3)))
+                {
+
+                    AddMovement(currentInput);
+                }
+                else
+                {
+                    currentInput = 0;
+                }
+            }
         }
 
         if (Physics.Raycast(this.transform.position, offset, 1f) && currentTween == lastInput)
@@ -77,33 +95,34 @@ public class PacStudentController : MonoBehaviour
         if (collision.gameObject.name.Equals("TeleporterLeft") && tweener.TweenDone())
         {
             sub.transform.position = new Vector3(sub.transform.position.x + grid.getX() - 1, sub.transform.position.y, 0);           
-            lastInput = 1;
+            currentInput = 1;
         }
         if (collision.gameObject.name.Equals("TeleporterRight") && tweener.TweenDone())
         {
             sub.transform.position = new Vector3(sub.transform.position.x - grid.getX() + 1, sub.transform.position.y, 0);
-            lastInput = 3;
+            currentInput = 3;
         }
         if (collision.gameObject.name.Equals("TeleporterUp") && tweener.TweenDone())
         {
             sub.transform.position = new Vector3(sub.transform.position.x , sub.transform.position.y - grid.getY() + 1, 0);
-            lastInput = 2;
+            currentInput = 2;
         }
         if (collision.gameObject.name.Equals("TeleporterDown") && tweener.TweenDone())
         {
             sub.transform.position = new Vector3(sub.transform.position.x, sub.transform.position.y + grid.getY() - 1, 0);
-            lastInput = 4;
+            currentInput = 4;
         }
     }
 
 
-    private void AddMovement()
+    private void AddMovement(int input)
     {
-        switch (lastInput)
+        switch (input)
         {
             case 1:
                 tweener.AddTween(this.transform, this.transform.position, (Vector2)this.transform.position + new Vector2(-1.0f, 0f), 0.35f);
-                offset = Vector3.left * 0.50f;
+                currentInput = input;
+                forwardCheck = Vector3.left;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubLeft"))
                 {
                     animator.SetTrigger("Left"); 
@@ -112,7 +131,8 @@ public class PacStudentController : MonoBehaviour
                 break;
             case 2:
                 tweener.AddTween(this.transform, this.transform.position, (Vector2)this.transform.position + new Vector2(0f, 1.0f), 0.35f);
-                offset = Vector3.up * 0.50f;
+                currentInput = input;
+                forwardCheck = Vector3.up;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubUp"))
                 {
                     animator.SetTrigger("Up");
@@ -121,7 +141,8 @@ public class PacStudentController : MonoBehaviour
                 break;
             case 3:
                 tweener.AddTween(this.transform, this.transform.position, (Vector2)this.transform.position + new Vector2(1.0f, 0f), 0.35f);
-                offset = Vector3.right * 0.50f;
+                currentInput = input;
+                forwardCheck = Vector3.right;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubRIght"))
                 {
                     animator.SetTrigger("Right");
@@ -130,7 +151,8 @@ public class PacStudentController : MonoBehaviour
                 break;
             case 4:
                 tweener.AddTween(this.transform, this.transform.position, (Vector2)this.transform.position + new Vector2(0f, -1.0f), 0.35f);
-                offset = Vector3.down * 0.50f;
+                currentInput = input;
+                forwardCheck = Vector3.down;
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("SubDown"))
                 {
                     animator.SetTrigger("Down");

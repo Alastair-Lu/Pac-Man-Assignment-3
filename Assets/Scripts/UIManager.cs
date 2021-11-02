@@ -21,10 +21,25 @@ public class UIManager : MonoBehaviour
 
     public void LoadFirstLevel()
     {
-        if (!sceneLoaded)
+        if (SceneManager.GetActiveScene().buildIndex == 0)
         {
             SceneManager.LoadSceneAsync(1);
-            sceneLoaded = true;
+            SceneManager.sceneLoaded += OnsceneLoaded;
         }
+    }
+
+    public void OnsceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if(scene.buildIndex == 1)
+        {
+            Button button = GameObject.FindGameObjectWithTag("QuitButton").GetComponent<Button>();
+            button.onClick.AddListener(QuitToStart);
+        }
+    }
+
+    public void QuitToStart()
+    {
+        SceneManager.LoadSceneAsync(0);
+        SceneManager.sceneLoaded += OnsceneLoaded;
     }
 }
