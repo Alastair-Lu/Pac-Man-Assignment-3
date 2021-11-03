@@ -14,6 +14,7 @@ TagManager:
   - Cherry
   - Ghost
   - Scared Timer
+  - Start TImer
   layers:
   - Default
   - TransparentFX

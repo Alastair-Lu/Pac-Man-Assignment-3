@@ -18,9 +18,11 @@ public class LevelGenerator : MonoBehaviour
     public GameObject ExistingGrid;
     public GameObject PowerPellet;
     private List<List<Transform>> ObjList = new List<List<Transform>>();
+    private UIManager uimanager;
     // Start is called before the first frame update
     void Start()
     {
+        uimanager = FindObjectOfType<UIManager>();
         ExistingGrid.SetActive(false);
         ExistingPP.SetActive(false);
         //select which mode to read in procedural values in unity, reads csv by default
@@ -132,11 +134,12 @@ public class LevelGenerator : MonoBehaviour
             for (int j = 0; j < Grid[i].Count; j++)
             {                
                 ObjList[i].Add( SpawnTile(j, i).transform);
-                
+                if(Grid[i][j] == 5 || Grid[i][j] == 6)
+                {
+                    uimanager.totalPelletCount += 1;
+                }
             }            
         }
-
-
     }
 
     // Update is called once per frame

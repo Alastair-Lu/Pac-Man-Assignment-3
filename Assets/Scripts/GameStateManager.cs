@@ -6,6 +6,7 @@ public class GameStateManager : MonoBehaviour
 {
     // Start is called before the first frame update
     public enum GameState { Start, LevelStart, Default, Scared, Dead, GameOver}
+    public enum GhostState { Alive, Scared, Dead}
     public static int currentGameState = (int)GameState.Start;
     void Awake()
     {

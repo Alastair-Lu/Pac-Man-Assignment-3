@@ -14,40 +14,54 @@ public class PacStudentController : MonoBehaviour
     private Vector3 forwardCheck;
     public ParticleSystem bubbles;
     private UIManager uimanager;
+    private Vector3 initialPos;
+    public AudioSource audioSource;
+    private float deadTimer = 3;
     // Start is called before the first frame update
     void Start()
     {
         uimanager = FindObjectOfType<UIManager>();
+        initialPos = sub.transform.position;
     }    
     // Update is called once per frame
     void Update()
     {
-        if(GameStateManager.currentGameState != (int)GameStateManager.GameState.Dead && GameStateManager.currentGameState != (int)GameStateManager.GameState.GameOver)
+        if(GameStateManager.currentGameState != (int)GameStateManager.GameState.Dead && GameStateManager.currentGameState != (int)GameStateManager.GameState.GameOver && GameStateManager.currentGameState != (int)GameStateManager.GameState.LevelStart)
         {
             if (Input.GetKeyDown(KeyCode.A))
             {
-                Debug.Log(GameStateManager.currentGameState + " " + (int)GameStateManager.GameState.Dead);
                 lastInput = 1;
                 check = Vector3.left;
             }
             if (Input.GetKeyDown(KeyCode.W))
             {
-                Debug.Log(GameStateManager.currentGameState + " " + (int)GameStateManager.GameState.Dead);
                 lastInput = 2;
                 check = Vector3.up;
             }
             if (Input.GetKeyDown(KeyCode.D))
             {
-                Debug.Log(GameStateManager.currentGameState + " " + (int)GameStateManager.GameState.Dead);
                 lastInput = 3;
                 check = Vector3.right;
             }
             if (Input.GetKeyDown(KeyCode.S))
             {
-                Debug.Log(GameStateManager.currentGameState + " " + (int)GameStateManager.GameState.Dead);
                 lastInput = 4;
                 check = Vector3.down;
             }
+        }
+        else
+        {
+            lastInput = 0;
+            currentInput = 0;
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            animator.SetTrigger("SubDead");
+            GameStateManager.setGameState((int)GameStateManager.GameState.Dead);
+            lastInput = 0;
+            currentInput = 0;
+            animator.speed = 1;
+            bubbles.Stop();
         }
         if (tweener.TweenDone())
         {
@@ -73,6 +87,21 @@ public class PacStudentController : MonoBehaviour
                 }
             }
         }
+        if(GameStateManager.currentGameState == (int)GameStateManager.GameState.Dead)
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("SubDead"))
+            {
+                deadTimer -= Time.deltaTime;
+                if(deadTimer <= 0)
+                {
+                    deadTimer = 3;
+                    sub.transform.position = initialPos;
+                    uimanager.lifeCount -= 1;
+                    GameStateManager.setGameState((int)GameStateManager.GameState.Default);
+                    animator.SetTrigger("Alive");
+                }
+            }
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -82,57 +111,65 @@ public class PacStudentController : MonoBehaviour
 
     private void OnTriggerStay(Collider collision)
     {
-        if (collision.gameObject.name.Equals("TeleporterLeft") && tweener.TweenDone())
+        if(GameStateManager.currentGameState == (int)GameStateManager.GameState.Default || GameStateManager.currentGameState == (int)GameStateManager.GameState.Scared)
         {
-            sub.transform.position = new Vector3(sub.transform.position.x + grid.getX() - 1, sub.transform.position.y, 0);           
-            currentInput = 1;
-        }
-        if (collision.gameObject.name.Equals("TeleporterRight") && tweener.TweenDone())
-        {
-            sub.transform.position = new Vector3(sub.transform.position.x - grid.getX() + 1, sub.transform.position.y, 0);
-            currentInput = 3;
-        }
-        if (collision.gameObject.name.Equals("TeleporterUp") && tweener.TweenDone())
-        {
-            sub.transform.position = new Vector3(sub.transform.position.x , sub.transform.position.y - grid.getY() + 1, 0);
-            currentInput = 2;
-        }
-        if (collision.gameObject.name.Equals("TeleporterDown") && tweener.TweenDone())
-        {
-            sub.transform.position = new Vector3(sub.transform.position.x, sub.transform.position.y + grid.getY() - 1, 0);
-            currentInput = 4;
-        }
-        if (collision.gameObject.tag.Equals("Pellet"))
-        {
-            uimanager.scoreValue += 10;
-            Destroy(collision.gameObject);
-        }
-        if (collision.gameObject.tag.Equals("Big Pellet"))
-        {
-            uimanager.scoreValue += 100;
-            Destroy(collision.gameObject);
-            GameStateManager.setGameState((int)GameStateManager.GameState.Scared);
-        }
-        if (collision.gameObject.tag.Equals("Cherry"))
-        {
-            uimanager.scoreValue += 100;
-            Destroy(collision.gameObject);
-        }
-        if (collision.gameObject.tag.Equals("Ghost"))
-        {
-            if(GameStateManager.currentGameState == (int)GameStateManager.GameState.Scared)
+            if (collision.gameObject.name.Equals("TeleporterLeft") && tweener.TweenDone())
             {
-                uimanager.scoreValue += 300;
+                sub.transform.position = new Vector3(sub.transform.position.x + grid.getX() - 1, sub.transform.position.y, 0);
+                currentInput = 1;
             }
-            else
+            if (collision.gameObject.name.Equals("TeleporterRight") && tweener.TweenDone())
             {
-                animator.SetTrigger("SubDead");
-                GameStateManager.setGameState((int)GameStateManager.GameState.Dead);
-                lastInput = 0;
-                currentInput = 0;
-                Debug.Log(GameStateManager.currentGameState + " " + (int)GameStateManager.GameState.Dead);
+                sub.transform.position = new Vector3(sub.transform.position.x - grid.getX() + 1, sub.transform.position.y, 0);
+                currentInput = 3;
+            }
+            if (collision.gameObject.name.Equals("TeleporterUp") && tweener.TweenDone())
+            {
+                sub.transform.position = new Vector3(sub.transform.position.x, sub.transform.position.y - grid.getY() + 1, 0);
+                currentInput = 2;
+            }
+            if (collision.gameObject.name.Equals("TeleporterDown") && tweener.TweenDone())
+            {
+                sub.transform.position = new Vector3(sub.transform.position.x, sub.transform.position.y + grid.getY() - 1, 0);
+                currentInput = 4;
+            }
+            if (collision.gameObject.tag.Equals("Pellet"))
+            {
+                uimanager.scoreValue += 10;
+                Destroy(collision.gameObject);
+                uimanager.pelletCount += 1;
+            }
+            if (collision.gameObject.tag.Equals("Big Pellet"))
+            {
+                uimanager.scoreValue += 100;
+                Destroy(collision.gameObject);
+                GameStateManager.setGameState((int)GameStateManager.GameState.Scared);
+                uimanager.pelletCount += 1;
+                Debug.Log(uimanager.pelletCount + " " + uimanager.totalPelletCount);
+            }
+            if (collision.gameObject.tag.Equals("Cherry"))
+            {
+                uimanager.scoreValue += 100;
+                Destroy(collision.gameObject);
+            }
+            if (collision.gameObject.tag.Equals("Ghost"))
+            {
+                if (GameStateManager.currentGameState == (int)GameStateManager.GameState.Scared)
+                {
+                    collision.gameObject.GetComponent<Ghost>().ghost = (int)GameStateManager.GhostState.Dead;
+                }
+                else
+                {
+                    animator.SetTrigger("SubDead");
+                    GameStateManager.setGameState((int)GameStateManager.GameState.Dead);
+                    lastInput = 0;
+                    currentInput = 0;
+                    animator.speed = 1;
+                    bubbles.Stop();
+                }
             }
         }
+        
     }
 
 
