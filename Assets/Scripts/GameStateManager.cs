@@ -8,6 +8,7 @@ public class GameStateManager : MonoBehaviour
     public enum GameState { Start, LevelStart, Default, Scared, Dead, GameOver}
     public enum GhostState { Alive, Scared, Dead}
     public static int currentGameState = (int)GameState.Start;
+    public static int deadGhost = 0;
     void Awake()
     {
         int numManager = FindObjectsOfType<UIManager>().Length;
@@ -29,5 +30,14 @@ public class GameStateManager : MonoBehaviour
     public static void setGameState(int state)
     {
         currentGameState = state;
+    }
+
+    public static void setDeadGhost(int amount)
+    {
+        deadGhost = amount;
+    }
+    public static int getDeadGhost()
+    {
+        return deadGhost;
     }
 }

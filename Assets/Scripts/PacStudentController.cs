@@ -17,6 +17,10 @@ public class PacStudentController : MonoBehaviour
     private Vector3 initialPos;
     public AudioSource audioSource;
     private float deadTimer = 3;
+    public AudioSource collect;
+    public AudioPlayer audioPlayer;
+    public AudioSource bump;
+    private int bumpAmount = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -54,14 +58,10 @@ public class PacStudentController : MonoBehaviour
             lastInput = 0;
             currentInput = 0;
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+
+        if (lastInput != currentInput)
         {
-            animator.SetTrigger("SubDead");
-            GameStateManager.setGameState((int)GameStateManager.GameState.Dead);
-            lastInput = 0;
-            currentInput = 0;
-            animator.speed = 1;
-            bubbles.Stop();
+            bumpAmount = 0;
         }
         if (tweener.TweenDone())
         {
@@ -70,6 +70,7 @@ public class PacStudentController : MonoBehaviour
                 animator.speed = 1;
                 AddMovement(lastInput);
                 bubbles.Play();
+                audioSource.Play();
             }
             else
             {
@@ -82,8 +83,15 @@ public class PacStudentController : MonoBehaviour
                 else if (GameStateManager.currentGameState != (int)GameStateManager.GameState.Dead)
                 {
                     currentInput = 0;
+                    lastInput = 0;
+                    audioSource.Stop();
                     animator.speed = 0;
                     bubbles.Stop();
+                   /* if (!bump.isPlaying && bumpAmount == 0)
+                    {
+                        bump.Play();
+                        bumpAmount += 1;
+                    }*/
                 }
             }
         }
@@ -138,6 +146,7 @@ public class PacStudentController : MonoBehaviour
                 uimanager.scoreValue += 10;
                 Destroy(collision.gameObject);
                 uimanager.pelletCount += 1;
+                collect.Play();
             }
             if (collision.gameObject.tag.Equals("Big Pellet"))
             {
@@ -146,17 +155,22 @@ public class PacStudentController : MonoBehaviour
                 GameStateManager.setGameState((int)GameStateManager.GameState.Scared);
                 uimanager.pelletCount += 1;
                 Debug.Log(uimanager.pelletCount + " " + uimanager.totalPelletCount);
+                collect.Play();
+                //audioPlayer.PlayScared();
+
             }
             if (collision.gameObject.tag.Equals("Cherry"))
             {
                 uimanager.scoreValue += 100;
                 Destroy(collision.gameObject);
+                collect.Play();
             }
             if (collision.gameObject.tag.Equals("Ghost"))
             {
                 if (GameStateManager.currentGameState == (int)GameStateManager.GameState.Scared)
                 {
                     collision.gameObject.GetComponent<Ghost>().ghost = (int)GameStateManager.GhostState.Dead;
+                    //audioPlayer.PlayDead();
                 }
                 else
                 {

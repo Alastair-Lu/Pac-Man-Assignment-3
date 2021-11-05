@@ -25,6 +25,7 @@ public class UIManager : MonoBehaviour
     private float bestTime;
     private int bestScore;
     public SaveGameManager saveGM;
+    public AudioPlayer audioPlayer;
     // Start is called before the first frame update
     void Awake()
     {
@@ -79,6 +80,10 @@ public class UIManager : MonoBehaviour
                 GameStateManager.setGameState((int)GameStateManager.GameState.Default);
                 scaredTimer.enabled = false;
                 ghostTimer = 10;
+                if(GameStateManager.getDeadGhost() == 0)
+                {
+                   // audioPlayer.PlayNormal();
+                }
             }
         }
         if(GameStateManager.currentGameState == (int)GameStateManager.GameState.LevelStart)

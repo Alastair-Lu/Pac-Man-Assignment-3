@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class AudioPlayer : MonoBehaviour
 {
-    public AudioSource StartMusic;
     public AudioSource StartMain;
+    public AudioSource StartScared;
+    public AudioSource StartDead;
     private bool startPlaying = false;
     private float timer;
     // Start is called before the first frame update
@@ -17,15 +18,28 @@ public class AudioPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!StartMusic.isPlaying)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            timer += Time.deltaTime;
+            StartMain.pitch += 1.0f;
         }
-        if (!StartMusic.isPlaying && !startPlaying &&timer > 0.75f)
-        {
-            StartMain.Play();
-            startPlaying = true;
-        }
-            
+
+    }
+    public void PlayNormal()
+    {
+        StartMain.Play();
+        StartScared.Stop();
+        StartDead.Stop();
+    }
+    public void PlayScared()
+    {
+        StartMain.Stop();
+        StartScared.Play();
+        StartDead.Stop();
+    }
+    public void PlayDead()
+    {
+        StartMain.Stop();
+        StartScared.Stop();
+        StartDead.Play();
     }
 }
